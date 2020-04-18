@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 68630302}
   - component: {fileID: 68630301}
   m_Layer: 0
-  m_Name: hp
+  m_Name: _hp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -524,7 +524,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 0b71493a4f3d45037bfbcddd19760146, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0.5
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -651,7 +651,7 @@ GameObject:
   - component: {fileID: 1970733206}
   - component: {fileID: 1970733205}
   m_Layer: 0
-  m_Name: revolver
+  m_Name: _revolver
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -777,7 +777,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 1, g: 0.19215685, b: 0.89668256, a: 1}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -884,7 +884,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7657001fd9d98064dac3f46ab65c3e13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sens: 0.025
+  sway: 0.0025
+  raise: 0.2
+  swayDamp: 6
 --- !u!114 &2845864311062580810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -906,14 +908,20 @@ MonoBehaviour:
   fall: 0.01
   rof: 0.15
   roc: 0.08
+  invincible: 0
   shoutPrefab: {fileID: 8371894471333490967, guid: 21d7cff8745a58efeadafc293d40fb38,
     type: 3}
+  fx_hp: 0
+  lastHit: 0
+  cocked: 0
   down: 0
+  downside: 0
   hp: 0
   look: 0
   manual: {x: 0, y: 0, z: 0, w: 0}
-  fx_hp: 0
-  cocked: 0
+  angv: 0
+  angle: 0
+  vel: 0
 --- !u!65 &3040620454790805784
 BoxCollider:
   m_ObjectHideFlags: 0

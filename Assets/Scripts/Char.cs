@@ -22,28 +22,31 @@ public class Char : MonoBehaviour
 
     public float rof;
     public float roc;
+    public bool invincible;
 
     // public float upright;
     // public float deadzone;
 
     public TextMesh shoutPrefab;
 
+    [HideInInspector] public float fx_hp;
+    [HideInInspector] public float lastHit;
+    [HideInInspector] public bool cocked;
     [HideInInspector] public bool down;
+    [HideInInspector] public int downside;
     [HideInInspector] public int hp;
-    float angv;
-    float angle;
-    float vel;
-    float pos;
-    float depth;
     [HideInInspector] public float look;
     [HideInInspector] public Quaternion manual;
+
+    [HideInInspector] public float angv;
+    [HideInInspector] public float angle;
+    [HideInInspector] public float vel;
+    float pos;
+    float depth;
     float shootTimer;
     float cockTimer;
     AudioSource[] snd;
     Transform cast;
-
-    [HideInInspector] public float fx_hp;
-    [HideInInspector] public bool cocked;
 
     enum Sound
     {
@@ -129,6 +132,7 @@ public class Char : MonoBehaviour
 
         angle = Mathf.Max(-lim, Mathf.Min(lim, angle));
         down = Mathf.Abs(angle) > Global.Values.thresh * Mathf.PI * .5f;
+        downside = angle > 0 ? -1 : 1;
     }
 
     public void TextPop(string[] msg, Color col)
@@ -163,7 +167,7 @@ public class Char : MonoBehaviour
 
     public void Hit(int side)
     {
-        --hp;
+        if (!invincible) --hp;
         if (hp < 0) hp = 0;
 
         if (0 == hp)
@@ -191,6 +195,8 @@ public class Char : MonoBehaviour
             Camera.main.GetComponent<Cam>().shake += 0.3f;
             fx_hp += 0.5f;
         }
+
+        lastHit = Time.time;
     }
 
     public RaycastHit? Cast(Vector3 dir)

@@ -3,29 +3,26 @@ using UnityEngine;
 [RequireComponent(typeof(Char))]
 public class Player : MonoBehaviour
 {
+    // public float sens;
+    public float sway;
+    public float raise;
+    public float swayDamp;
+
     Char self;
     TextMesh hp;
-    public float sens;
+    Transform gun;
+    Vector3 gunCenter;
 
     void Start()
     {
         self = GetComponent<Char>();
-        hp = Camera.main.transform.Find("hp").GetComponent<TextMesh>();
+        hp = Camera.main.transform.Find("_hp").GetComponent<TextMesh>();
+        gun = Camera.main.transform.Find("_revolver");
+        gunCenter = gun.localPosition;
     }
 
-    void Update()
+    void Control()
     {
-        hp.text = self.hp.ToString();
-
-        if (self.fx_hp > 0)
-        {
-            hp.gameObject.SetActive(Time.time % 0.1f > 0.05f);
-        }
-        else
-        {
-            hp.gameObject.SetActive(false);
-        }
-
         if (0 == self.hp)
             return;
 
@@ -70,5 +67,31 @@ public class Player : MonoBehaviour
         {
             self.Cock();
         }
+    }
+
+    void Update()
+    {
+        hp.text = self.hp.ToString();
+
+        if (self.fx_hp > 0)
+        {
+            hp.gameObject.SetActive(Time.time % 0.1f > 0.05f);
+        }
+        else
+        {
+            hp.gameObject.SetActive(false);
+        }
+
+        var sign = self.angle > 0 ? 1 : -1;
+        var offset = new Vector3(
+            -self.vel * sway,
+            sign * self.angv * raise,
+            0
+        );
+
+        var swayPt = gunCenter + offset;
+        gun.localPosition = Vector3.Lerp(gun.localPosition, swayPt, Time.deltaTime * swayDamp);
+
+        Control();
     }
 }
