@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Global : MonoBehaviour
 {
@@ -28,6 +29,11 @@ public class Global : MonoBehaviour
 
         Camera.main.backgroundColor = clear;
         Time.timeScale = 1;
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene("Main");
+        }
     }
 
     public static Global inst;
