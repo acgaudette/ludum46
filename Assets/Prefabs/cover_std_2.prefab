@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &5455622730048141302
+--- !u!1001 &8266373815031901354
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 6994290464328828850, guid: 3d677a7ba0822af219c29086950d1693,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6994290464328828850, guid: 3d677a7ba0822af219c29086950d1693,
         type: 3}
@@ -66,11 +66,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 6561d4709110073da9e0df77fcbf62fe, type: 2}
+      objectReference: {fileID: 2100000, guid: 89bd9239f876e6edab9a2ca2469394ce, type: 2}
     - target: {fileID: 6994290464328828855, guid: 3d677a7ba0822af219c29086950d1693,
         type: 3}
       propertyPath: m_Name
-      value: cover_std_1
+      value: cover_std_2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3d677a7ba0822af219c29086950d1693, type: 3}
