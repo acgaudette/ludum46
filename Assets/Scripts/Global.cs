@@ -34,6 +34,9 @@ public class Global : MonoBehaviour
         {
             SceneManager.LoadScene("Main");
         }
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     public static Global inst;
