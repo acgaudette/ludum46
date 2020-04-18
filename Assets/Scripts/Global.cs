@@ -12,6 +12,8 @@ public class Global : MonoBehaviour
     public static float invert;
     Color clear;
 
+    public Texture2D cursor;
+
     void Start()
     {
         clear = Camera.main.backgroundColor;
@@ -37,6 +39,8 @@ public class Global : MonoBehaviour
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;
+        Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
+        // Cursor.lockState = CursorLockMode.Locked; // Bugs out mouse on Linux
     }
 
     public static Global inst;

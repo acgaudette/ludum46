@@ -4,6 +4,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     Char self;
+    public float sens;
 
     void Start()
     {
@@ -34,8 +35,14 @@ public class Player : MonoBehaviour
             self.Tap(dir);
         }
 
+        // Screen size dependent, but the alternative is broken on linux
         self.look = Input.mousePosition.x / Screen.width;
         self.look = 2 * self.look - 1;
+
+        /*
+        self.look += Input.GetAxis("Mouse X") * sens;
+        self.look = Mathf.Max(-1, Mathf.Min(1, self.look));
+        */
 
         var fire = Input.GetKeyDown(KeyCode.Space)
             || Input.GetMouseButtonDown(0);
