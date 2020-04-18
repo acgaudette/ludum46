@@ -18,6 +18,7 @@ public class Opp : MonoBehaviour
     float exposure;
     float discovered;
     float seenDelay;
+    float stress;
 
     float[] scores;
     Action action;
@@ -38,6 +39,7 @@ public class Opp : MonoBehaviour
         , Switch
         , Hide
         , Cock
+        , Recover
         , Scan
     };
 
@@ -105,9 +107,20 @@ public class Opp : MonoBehaviour
 
     void Move(int side, float urg)
     {
-        if (timer > 1 - urg)
+        urg *= 0.95f;
+        float val = 1 - urg;
+        if (timer > val)
         {
             self.Tap(side);
+            timer = 0;
+        }
+    }
+
+    void Recover()
+    {
+        if (timer > 0.1f)
+        {
+            self.Tap(-self.downside);
             timer = 0;
         }
     }
@@ -178,6 +191,9 @@ public class Opp : MonoBehaviour
         seen += Time.deltaTime;
         seenDelay = Mathf.Clamp01(seen / 3);
 
+        stress = Mathf.Clamp01(0.7f * (Time.time - self.lastHit));
+        stress = 1 - stress * stress;
+
         /* ... */
 
         float coverScore = 0;
@@ -204,7 +220,10 @@ public class Opp : MonoBehaviour
         hideScore *= 2; // (!)
 
         float cockScore = self.cocked ? 0 : 1;
-        cockScore *= 3; // (!)
+        cockScore *= 2; // (!)
+
+        float recScore = self.down ? 1 : 0;
+        recScore *= 2; // (!)
 
         scores = new float[]
         {
@@ -215,6 +234,7 @@ public class Opp : MonoBehaviour
             switchScore,
             hideScore,
             cockScore,
+            recScore,
         };
 
         scores[(int)action] += hysteresis;
@@ -246,16 +266,18 @@ public class Opp : MonoBehaviour
         }
 
         // target = Quaternion.AngleAxis(180, Vector3.up);
+        var urg = 0.5f;
         switch (action)
         {
         case Action.Cover:
-            // TODO: cover selection, urgency
-            Move(NearestCover() > 0 ? 1 : -1, 0.7f);
+            urg = 0.7f + stress * 0.3f;
+            Move(NearestCover() > 0 ? 1 : -1, urg);
             break;
         case Action.Peek:
             // Move(NearestCover() > 0 ? -1 : 1, 0.5f);
+            urg = 0.2f;
             var side = transform.position.x > lastTarget.x ? -1 : 1;
-            Move(side, 0.2f);
+            Move(side, urg);
             break;
         case Action.Aim:
             var guess = lastTarget - transform.position;
@@ -267,12 +289,16 @@ public class Opp : MonoBehaviour
             break;
         case Action.Switch:
             side = switchSide;
-            Move(switchSide, 0.7f);
+            urg = 0.7f;
+            Move(switchSide, urg);
             break;
         case Action.Hide:
             break;
         case Action.Cock:
             self.Cock();
+            break;
+        case Action.Recover:
+            Recover();
             break;
         }
 
