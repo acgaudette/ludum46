@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class Char : MonoBehaviour
 {
@@ -18,6 +19,10 @@ public class Char : MonoBehaviour
     [Range(0, 1)] public float flat;
     [Range(0, 1)] public float spin;
 
+    public float slomo;
+    public static float invert;
+    Color clear;
+
     public float k_width;
 
     [HideInInspector] public bool down;
@@ -31,6 +36,7 @@ public class Char : MonoBehaviour
     void Start()
     {
         depth = transform.position.z;
+        clear = Camera.main.backgroundColor;
     }
 
     void FixedUpdate()
@@ -88,8 +94,30 @@ public class Char : MonoBehaviour
         transform.position = new Vector3(pos, 0, depth);
     }
 
+    void Hit()
+    {
+        var audio = GetComponents<AudioSource>();
+        audio[1].Play();
+        invert += slomo;
+    }
+
     void Shoot()
     {
+        RaycastHit hit;
+        var start = transform.Find("_cast").position;
+        var fwd = transform.rotation * Vector3.forward;
+        var ray = Physics.Raycast(start, fwd, out hit, 128);
+
+        // Debug.DrawRay(start, fwd * 128, ray ? Color.green : Color.red, 0.5f, false);
+
+        if (ray)
+        {
+            if (hit.transform.tag == "opponent")
+            {
+                hit.transform.GetComponent<Char>().Hit();
+            }
+        }
+
         var audio = GetComponent<AudioSource>();
         audio.Play();
     }
@@ -107,7 +135,7 @@ public class Char : MonoBehaviour
 
     void Control()
     {
-        if (!player) return;
+        if (!player || invert > 0) return;
 
         var right = (
                Input.GetKeyDown(KeyCode.D)
@@ -140,5 +168,16 @@ public class Char : MonoBehaviour
     {
         Animate();
         Control();
+
+        if (invert > 0)
+        {
+            invert -= Time.unscaledDeltaTime;
+            Time.timeScale = 0;
+            Camera.main.backgroundColor = Color.white;
+            return;
+        }
+
+        Camera.main.backgroundColor = clear;
+        Time.timeScale = 1;
     }
 }
