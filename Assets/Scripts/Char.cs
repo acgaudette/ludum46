@@ -21,6 +21,7 @@ public class Char : MonoBehaviour
     public float fall;
 
     public float rof;
+    public float roc;
 
     // public float upright;
     // public float deadzone;
@@ -36,14 +37,35 @@ public class Char : MonoBehaviour
     float depth;
     [HideInInspector] public float look;
     [HideInInspector] public Quaternion manual;
-    float timer;
+    float shootTimer;
+    float cockTimer;
+    AudioSource[] snd;
+    Transform cast;
 
     [HideInInspector] public float fx_hp;
+    [HideInInspector] public bool cocked;
+
+    enum Sound
+    {
+          Fire
+        , Hit
+        , Fall
+        , Cock
+        , Move
+    };
 
     void Start()
     {
         depth = transform.position.z;
         manual = Quaternion.identity;
+
+        var audio = transform.Find("_snd");
+        Debug.Assert(audio != null);
+        snd = audio.GetComponents<AudioSource>();
+
+        cast = transform.Find("_cast");
+        Debug.Assert(cast != null);
+
         hp = 3;
     }
 
@@ -56,6 +78,11 @@ public class Char : MonoBehaviour
         {
             vel *= -1;
             vel *= bounce;
+
+            if (Mathf.Abs(vel) > 0.05f)
+            {
+                Sfx(Sound.Fall);
+            }
 
             /*
             if (player)
@@ -93,10 +120,11 @@ public class Char : MonoBehaviour
             angv *= -1;
             angv *= slap;
 
-            /*
-            if (player && Mathf.Abs(angv) > 0.01f)
-                Camera.main.GetComponent<Cam>().shake += 0.1f;
-            */
+            if (Mathf.Abs(angv) > 0.01f)
+            {
+                Sfx(Sound.Fall);
+                // Camera.main.GetComponent<Cam>().shake += 0.1f;
+            }
         }
 
         angle = Mathf.Max(-lim, Mathf.Min(lim, angle));
@@ -114,6 +142,11 @@ public class Char : MonoBehaviour
         pop.text = caps;
         pop.color = col;
         GameObject.Destroy(pop.gameObject, 0.5f);
+    }
+
+    void Sfx(Sound sound)
+    {
+        snd[(int)sound].Play();
     }
 
     void Animate()
@@ -138,8 +171,7 @@ public class Char : MonoBehaviour
             angv += side * 10;
         }
 
-        var audio = GetComponents<AudioSource>();
-        audio[1].Play();
+        Sfx(Sound.Hit);
 
         if (!Player)
         {
@@ -163,7 +195,7 @@ public class Char : MonoBehaviour
     public RaycastHit? Cast(Vector3 dir)
     {
         RaycastHit hit;
-        var start = transform.Find("_cast").position;
+        var start = cast.position;
         var ray = Physics.Raycast(start, dir, out hit, 128);
 
         // Debug.DrawRay(start, fwd * 128, ray ? Color.green : Color.red, 0.5f, false);
@@ -172,9 +204,33 @@ public class Char : MonoBehaviour
         return ray ? result : null;
     }
 
+    public void Cock()
+    {
+        if (cockTimer > 0) return;
+
+        if (!cocked)
+        {
+            Sfx(Sound.Cock);
+        }
+
+        cocked = true;
+        cockTimer = roc;
+    }
+
     public void Shoot()
     {
-        if (timer > 0) return;
+        if (shootTimer > 0) return;
+
+        if (!cocked)
+        {
+            Sfx(Sound.Cock);
+            return;
+        }
+
+        cocked = false;
+
+        if (Player)
+            Camera.main.GetComponent<Cam>().shake += 0.1f;
 
         var result = Cast(transform.rotation * Vector3.forward);
         if (result.HasValue)
@@ -187,8 +243,7 @@ public class Char : MonoBehaviour
             }
         }
 
-        var audio = GetComponent<AudioSource>();
-        audio.Play();
+        Sfx(Sound.Fire);
 
         if (!Player)
         {
@@ -201,7 +256,7 @@ public class Char : MonoBehaviour
                 }, Color.black);
         }
 
-        timer = rof;
+        shootTimer = rof;
     }
 
     public void Tap(int dir)
@@ -213,12 +268,15 @@ public class Char : MonoBehaviour
         {
             vel += dash * dir; // Clamp?
         }
+
+        Sfx(Sound.Move);
     }
 
     void Update()
     {
         Animate();
-        timer = Mathf.Max(0, timer - Time.deltaTime);
+        shootTimer = Mathf.Max(0, shootTimer - Time.deltaTime);
+        cockTimer = Mathf.Max(0, cockTimer - Time.deltaTime);
         fx_hp = Mathf.Max(fx_hp - Time.deltaTime, 0);
     }
 }

@@ -4,11 +4,13 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     Char self;
+    TextMesh hp;
     public float sens;
 
     void Start()
     {
         self = GetComponent<Char>();
+        hp = Camera.main.transform.Find("hp").GetComponent<TextMesh>();
     }
 
     void Update()
@@ -48,20 +50,25 @@ public class Player : MonoBehaviour
             || Input.GetMouseButtonDown(0);
         if (fire)
         {
-            Camera.main.GetComponent<Cam>().shake += 0.1f;
             self.Shoot();
         }
 
-        var text = Camera.main.transform.Find("hp").GetComponent<TextMesh>();
-        text.text = self.hp.ToString();
+        var cock = Input.GetKeyDown(KeyCode.LeftAlt)
+            || Input.GetMouseButtonDown(1);
+        if (cock)
+        {
+            self.Cock();
+        }
+
+        hp.text = self.hp.ToString();
 
         if (self.fx_hp > 0)
         {
-            text.gameObject.SetActive(Time.time % 0.1f > 0.05f);
+            hp.gameObject.SetActive(Time.time % 0.1f > 0.05f);
         }
         else
         {
-            text.gameObject.SetActive(false);
+            hp.gameObject.SetActive(false);
         }
     }
 }

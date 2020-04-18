@@ -7,14 +7,17 @@ public class Opp : MonoBehaviour
     public Char opp;
     public float aim;
     public float spread;
+    public float hysteresis;
 
     Vector3 lastTarget;
     Vector3 lastSelf;
+
     bool los;
     bool shot;
     float locked;
     float exposure;
     float discovered;
+    float seenDelay;
 
     float[] scores;
     Action action;
@@ -24,6 +27,7 @@ public class Opp : MonoBehaviour
     Quaternion target;
     float timer;
     int switchSide = 1;
+    float seen;
 
     enum Action
     {
@@ -33,6 +37,7 @@ public class Opp : MonoBehaviour
         , Fire
         , Switch
         , Hide
+        , Cock
         , Scan
     };
 
@@ -121,17 +126,17 @@ public class Opp : MonoBehaviour
 
         if (Vector3.Dot(dir, transform.forward) > 0.5f)
         {
-            RaycastHit hit;
-            var start = transform.Find("_cast").position;
-            var ray = Physics.Raycast(start, dir, out hit, 128);
-            if (ray)
+            var result = self.Cast(dir);
+            if (result.HasValue)
             {
-                var tag = hit.transform.tag;
+                var hit = result.Value.transform;
+                var tag = hit.tag;
                 if (tag == "Player")
                 {
                     los = true;
-                    lastTarget = hit.transform.position;
+                    lastTarget = hit.position;
                     lastSelf = transform.position;
+                    seenDelay = 0;
                 }
             }
         }
@@ -170,6 +175,9 @@ public class Opp : MonoBehaviour
         if (lastSelf.y < 0) disc = 2 * Global.Values.width;
         discovered = Mathf.Clamp01(1 - disc / (2 * Global.Values.width));
 
+        seen += Time.deltaTime;
+        seenDelay = Mathf.Clamp01(seen / 3);
+
         /* ... */
 
         float coverScore = 0;
@@ -179,7 +187,11 @@ public class Opp : MonoBehaviour
 
         float peekScore = shot ? 0 : 1;
 
-        float aimScore = locked;
+        float aimScore = 0;
+        aimScore += locked;
+        aimScore += seenDelay;
+        aimScore /= 2;
+
         float fireScore = shot ? 1 : 0;
 
         float switchScore = 0;
@@ -187,9 +199,12 @@ public class Opp : MonoBehaviour
         switchScore += discovered;
         switchScore /= 2;
 
-        float hideScore = 1 - exposure;
-        hideScore *= 2;
-        // hideScore *= 0.5f;
+        float hideScore = 0;
+        hideScore += 1 - exposure;
+        hideScore *= 2; // (!)
+
+        float cockScore = self.cocked ? 0 : 1;
+        cockScore *= 3; // (!)
 
         scores = new float[]
         {
@@ -199,9 +214,10 @@ public class Opp : MonoBehaviour
             fireScore,
             switchScore,
             hideScore,
+            cockScore,
         };
 
-        scores[(int)action] += 4;
+        scores[(int)action] += hysteresis;
 
         float total = 0;
         foreach (var score in scores)
@@ -242,7 +258,9 @@ public class Opp : MonoBehaviour
             Move(side, 0.2f);
             break;
         case Action.Aim:
-            target = Quaternion.LookRotation(dir, Vector3.up);
+            var guess = lastTarget - transform.position;
+            guess.Normalize();
+            target = Quaternion.LookRotation(guess, Vector3.up);
             break;
         case Action.Fire:
             self.Shoot();
@@ -252,6 +270,9 @@ public class Opp : MonoBehaviour
             Move(switchSide, 0.7f);
             break;
         case Action.Hide:
+            break;
+        case Action.Cock:
+            self.Cock();
             break;
         }
 
