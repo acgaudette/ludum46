@@ -48,6 +48,11 @@ public class Char : MonoBehaviour
         {
             vel *= -1;
             vel *= bounce;
+
+            /*
+            if (player)
+                Camera.main.GetComponent<Cam>().shake += 0.2f;
+            */
         }
 
         pos = Mathf.Max(-k_width, Mathf.Min(k_width, pos));
@@ -79,6 +84,11 @@ public class Char : MonoBehaviour
         {
             angv *= -1;
             angv *= slap;
+
+            /*
+            if (player && Mathf.Abs(angv) > 0.01f)
+                Camera.main.GetComponent<Cam>().shake += 0.1f;
+            */
         }
 
         angle = Mathf.Max(-lim, Mathf.Min(lim, angle));
@@ -103,6 +113,9 @@ public class Char : MonoBehaviour
 
     void Shoot()
     {
+        if (player)
+            Camera.main.GetComponent<Cam>().shake += 0.1f;
+
         RaycastHit hit;
         var start = transform.Find("_cast").position;
         var fwd = transform.rotation * Vector3.forward;
@@ -130,6 +143,11 @@ public class Char : MonoBehaviour
         if (!down)
         {
             vel += dash * dir; // Clamp?
+        }
+
+        if (player)
+        {
+            Camera.main.GetComponent<Cam>().heart += 0.1f;
         }
     }
 
