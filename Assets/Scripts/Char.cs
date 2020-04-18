@@ -13,17 +13,9 @@ public class Char : MonoBehaviour
     [Range(0, 1)] public float slap;
     public float damp;
     public float fall;
-    [Range(0, 1)] public float thresh;
+
     // public float upright;
     // public float deadzone;
-    [Range(0, 1)] public float flat;
-    [Range(0, 1)] public float spin;
-
-    public float slomo;
-    public static float invert;
-    Color clear;
-
-    public float k_width;
 
     [HideInInspector] public bool down;
     float angv;
@@ -36,7 +28,6 @@ public class Char : MonoBehaviour
     void Start()
     {
         depth = transform.position.z;
-        clear = Camera.main.backgroundColor;
     }
 
     void FixedUpdate()
@@ -44,7 +35,7 @@ public class Char : MonoBehaviour
         vel *= friction;
         pos += vel * Time.deltaTime;
 
-        if (pos < -k_width || pos > k_width)
+        if (pos < -Global.Values.width || pos > Global.Values.width)
         {
             vel *= -1;
             vel *= bounce;
@@ -55,7 +46,7 @@ public class Char : MonoBehaviour
             */
         }
 
-        pos = Mathf.Max(-k_width, Mathf.Min(k_width, pos));
+        pos = Mathf.Max(-Global.Values.width, Mathf.Min(Global.Values.width, pos));
 
         int dir = angle > 0 ? 1 : -1;
 
@@ -79,7 +70,7 @@ public class Char : MonoBehaviour
 
         angle += angv;
 
-        float lim = flat * Mathf.PI * 0.5f;
+        float lim = Global.Values.flat * Mathf.PI * 0.5f;
         if (angle < -lim || angle > lim)
         {
             angv *= -1;
@@ -92,14 +83,14 @@ public class Char : MonoBehaviour
         }
 
         angle = Mathf.Max(-lim, Mathf.Min(lim, angle));
-        down = Mathf.Abs(angle) > thresh * Mathf.PI * .5f;
+        down = Mathf.Abs(angle) > Global.Values.thresh * Mathf.PI * .5f;
     }
 
     void Animate()
     {
         var dive = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
         var flip = Quaternion.AngleAxis(player ? 1 : 180, Vector3.up);
-        var aim = Quaternion.AngleAxis(look * spin * 90, Vector3.up);
+        var aim = Quaternion.AngleAxis(look * Global.Values.spin * 90, Vector3.up);
         transform.rotation = flip * aim * dive;
         transform.position = new Vector3(pos, 0, depth);
     }
@@ -108,7 +99,7 @@ public class Char : MonoBehaviour
     {
         var audio = GetComponents<AudioSource>();
         audio[1].Play();
-        invert += slomo;
+        Global.invert += Global.Values.sleep;
     }
 
     void Shoot()
@@ -153,7 +144,7 @@ public class Char : MonoBehaviour
 
     void Control()
     {
-        if (!player || invert > 0) return;
+        if (!player || Global.invert > 0) return;
 
         var right = (
                Input.GetKeyDown(KeyCode.D)
@@ -186,16 +177,5 @@ public class Char : MonoBehaviour
     {
         Animate();
         Control();
-
-        if (invert > 0)
-        {
-            invert -= Time.unscaledDeltaTime;
-            Time.timeScale = 0;
-            Camera.main.backgroundColor = Color.white;
-            return;
-        }
-
-        Camera.main.backgroundColor = clear;
-        Time.timeScale = 1;
     }
 }
