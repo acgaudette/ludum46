@@ -125,7 +125,13 @@ public class Char : MonoBehaviour
         audio[1].Play();
 
         if (!Player)
+        {
             Global.invert += Global.Values.sleep;
+        }
+        else
+        {
+            Camera.main.GetComponent<Cam>().shake += 0.3f;
+        }
     }
 
     public RaycastHit? Cast(Vector3 dir)
