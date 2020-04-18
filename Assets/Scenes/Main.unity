@@ -706,16 +706,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1993938597023791465, guid: 035abce720259928bbfa6fa35ba6591f,
-        type: 3}
-      propertyPath: sway
-      value: 0.0025
-      objectReference: {fileID: 0}
-    - target: {fileID: 1993938597023791465, guid: 035abce720259928bbfa6fa35ba6591f,
-        type: 3}
-      propertyPath: raise
-      value: 0.2
-      objectReference: {fileID: 0}
     - target: {fileID: 2845864311062580809, guid: 035abce720259928bbfa6fa35ba6591f,
         type: 3}
       propertyPath: m_LocalPosition.x
