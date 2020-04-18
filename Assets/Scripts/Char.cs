@@ -16,6 +16,7 @@ public class Char : MonoBehaviour
     // public float upright;
     // public float deadzone;
     [Range(0, 1)] public float flat;
+    [Range(0, 1)] public float spin;
 
     public float k_width;
 
@@ -25,6 +26,7 @@ public class Char : MonoBehaviour
     float vel;
     float pos;
     float depth;
+    float look;
 
     void Start()
     {
@@ -81,7 +83,8 @@ public class Char : MonoBehaviour
     {
         var dive = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
         var flip = Quaternion.AngleAxis(player ? 1 : 180, Vector3.up);
-        transform.rotation = flip * dive;
+        var aim = Quaternion.AngleAxis(look * spin * 90, Vector3.up);
+        transform.rotation = flip * aim * dive;
         transform.position = new Vector3(pos, 0, depth);
     }
 
@@ -117,6 +120,9 @@ public class Char : MonoBehaviour
         {
             Tap(dir);
         }
+
+        look = Input.mousePosition.x / Screen.width;
+        look = 2 * look - 1;
     }
 
     void Update()

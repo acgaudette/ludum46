@@ -359,6 +359,8 @@ MonoBehaviour:
   damp: 8
   fall: 0.01
   thresh: 0.35
+  flat: 0.9
+  spin: 0.6
   k_width: 8
   down: 0
 --- !u!4 &924174430
@@ -565,6 +567,8 @@ MonoBehaviour:
   damp: 8
   fall: 0.01
   thresh: 0.35
+  flat: 0.9
+  spin: 0.6
   k_width: 8
   down: 0
 --- !u!4 &1269897632
