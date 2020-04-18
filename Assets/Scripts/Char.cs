@@ -15,9 +15,9 @@ public class Char : MonoBehaviour
     [Range(0, 1)] public float thresh;
     // public float upright;
     // public float deadzone;
+    [Range(0, 1)] public float flat;
 
     public float k_width;
-    public const float k_flat = Mathf.PI * 0.5f;
 
     [HideInInspector] public bool down;
     float angv;
@@ -66,13 +66,14 @@ public class Char : MonoBehaviour
 
         angle += angv;
 
-        if (angle < -k_flat || angle > k_flat)
+        float lim = flat * Mathf.PI * 0.5f;
+        if (angle < -lim || angle > lim)
         {
             angv *= -1;
             angv *= slap;
         }
 
-        angle = Mathf.Max(-k_flat, Mathf.Min(k_flat, angle));
+        angle = Mathf.Max(-lim, Mathf.Min(lim, angle));
         down = Mathf.Abs(angle) > thresh * Mathf.PI * .5f;
     }
 
