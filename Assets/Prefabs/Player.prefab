@@ -905,7 +905,7 @@ MonoBehaviour:
   damp: 8
   fall: 0.01
   rof: 0.15
-  roc: 0.01
+  roc: 0.08
   shoutPrefab: {fileID: 8371894471333490967, guid: 21d7cff8745a58efeadafc293d40fb38,
     type: 3}
   down: 0

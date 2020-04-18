@@ -15,6 +15,17 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        hp.text = self.hp.ToString();
+
+        if (self.fx_hp > 0)
+        {
+            hp.gameObject.SetActive(Time.time % 0.1f > 0.05f);
+        }
+        else
+        {
+            hp.gameObject.SetActive(false);
+        }
+
         if (0 == self.hp)
             return;
 
@@ -58,17 +69,6 @@ public class Player : MonoBehaviour
         if (cock)
         {
             self.Cock();
-        }
-
-        hp.text = self.hp.ToString();
-
-        if (self.fx_hp > 0)
-        {
-            hp.gameObject.SetActive(Time.time % 0.1f > 0.05f);
-        }
-        else
-        {
-            hp.gameObject.SetActive(false);
         }
     }
 }

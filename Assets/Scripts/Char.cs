@@ -164,6 +164,7 @@ public class Char : MonoBehaviour
     public void Hit(int side)
     {
         --hp;
+        if (hp < 0) hp = 0;
 
         if (0 == hp)
         {
