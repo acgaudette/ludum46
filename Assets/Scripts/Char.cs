@@ -3,7 +3,13 @@ using System.Collections;
 
 public class Char : MonoBehaviour
 {
-    public bool player;
+    public bool Player
+    {
+        get
+        {
+            return GetComponent<Player>() != null;
+        }
+    }
 
     public float kick;
     public float dash;
@@ -23,7 +29,7 @@ public class Char : MonoBehaviour
     float vel;
     float pos;
     float depth;
-    float look;
+    [HideInInspector] public float look;
 
     void Start()
     {
@@ -89,24 +95,21 @@ public class Char : MonoBehaviour
     void Animate()
     {
         var dive = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
-        var flip = Quaternion.AngleAxis(player ? 1 : 180, Vector3.up);
+        var flip = Quaternion.AngleAxis(Player ? 1 : 180, Vector3.up);
         var aim = Quaternion.AngleAxis(look * Global.Values.spin * 90, Vector3.up);
         transform.rotation = flip * aim * dive;
         transform.position = new Vector3(pos, 0, depth);
     }
 
-    void Hit()
+    public void Hit()
     {
         var audio = GetComponents<AudioSource>();
         audio[1].Play();
         Global.invert += Global.Values.sleep;
     }
 
-    void Shoot()
+    public void Shoot()
     {
-        if (player)
-            Camera.main.GetComponent<Cam>().shake += 0.1f;
-
         RaycastHit hit;
         var start = transform.Find("_cast").position;
         var fwd = transform.rotation * Vector3.forward;
@@ -116,7 +119,8 @@ public class Char : MonoBehaviour
 
         if (ray)
         {
-            if (hit.transform.tag == "opponent")
+            var tag = hit.transform.tag;
+            if (tag == "opponent" || tag == "Player")
             {
                 hit.transform.GetComponent<Char>().Hit();
             }
@@ -126,7 +130,7 @@ public class Char : MonoBehaviour
         audio.Play();
     }
 
-    void Tap(int dir)
+    public void Tap(int dir)
     {
         Debug.Assert(dir != 0);
         angv += kick * -dir;
@@ -135,47 +139,10 @@ public class Char : MonoBehaviour
         {
             vel += dash * dir; // Clamp?
         }
-
-        if (player)
-        {
-            Camera.main.GetComponent<Cam>().heart += 0.1f;
-        }
-    }
-
-    void Control()
-    {
-        if (!player || Global.invert > 0) return;
-
-        var right = (
-               Input.GetKeyDown(KeyCode.D)
-            || Input.GetKeyDown(KeyCode.L)
-        ) ? 1 : 0;
-
-        var left = (
-               Input.GetKeyDown(KeyCode.A)
-            || Input.GetKeyDown(KeyCode.H)
-        ) ? -1 : 0;
-
-        int dir = left + right;
-        if (dir != 0)
-        {
-            Tap(dir);
-        }
-
-        look = Input.mousePosition.x / Screen.width;
-        look = 2 * look - 1;
-
-        var fire = Input.GetKeyDown(KeyCode.Space)
-            || Input.GetMouseButtonDown(0);
-        if (fire)
-        {
-            Shoot();
-        }
     }
 
     void Update()
     {
         Animate();
-        Control();
     }
 }
