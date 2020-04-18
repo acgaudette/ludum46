@@ -44,5 +44,17 @@ public class Player : MonoBehaviour
             Camera.main.GetComponent<Cam>().shake += 0.1f;
             self.Shoot();
         }
+
+        var text = Camera.main.transform.Find("hp").GetComponent<TextMesh>();
+        text.text = self.hp.ToString();
+
+        if (self.fx_hp > 0)
+        {
+            text.gameObject.SetActive(Time.time % 0.1f > 0.05f);
+        }
+        else
+        {
+            text.gameObject.SetActive(false);
+        }
     }
 }

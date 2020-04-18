@@ -25,6 +25,8 @@ public class Char : MonoBehaviour
     // public float upright;
     // public float deadzone;
 
+    public TextMesh shoutPrefab;
+
     [HideInInspector] public bool down;
     [HideInInspector] public int hp;
     float angv;
@@ -35,6 +37,8 @@ public class Char : MonoBehaviour
     [HideInInspector] public float look;
     [HideInInspector] public Quaternion manual;
     float timer;
+
+    [HideInInspector] public float fx_hp;
 
     void Start()
     {
@@ -99,6 +103,19 @@ public class Char : MonoBehaviour
         down = Mathf.Abs(angle) > Global.Values.thresh * Mathf.PI * .5f;
     }
 
+    public void TextPop(string[] msg, Color col)
+    {
+        string caps = msg[Random.Range(0, msg.Length)];
+        var pos = transform.position + Vector3.up * 2 + Vector3.forward * 0.5f;
+        pos += new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0);
+        var orient = Quaternion.LookRotation(Camera.main.transform.forward, Vector3.up);
+        var pop = GameObject.Instantiate(shoutPrefab, pos, orient)
+            .GetComponent<TextMesh>();
+        pop.text = caps;
+        pop.color = col;
+        GameObject.Destroy(pop.gameObject, 0.5f);
+    }
+
     void Animate()
     {
         var dive = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
@@ -127,10 +144,19 @@ public class Char : MonoBehaviour
         if (!Player)
         {
             Global.invert += Global.Values.sleep;
+            TextPop(
+                new[]
+                {
+                      "OUCH"
+                    , "OW"
+                    , "#%!@&"
+                },
+                Color.red);
         }
         else
         {
             Camera.main.GetComponent<Cam>().shake += 0.3f;
+            fx_hp += 0.5f;
         }
     }
 
@@ -164,6 +190,17 @@ public class Char : MonoBehaviour
         var audio = GetComponent<AudioSource>();
         audio.Play();
 
+        if (!Player)
+        {
+            TextPop(
+                new[]
+                {
+                      "BANG"
+                    , "POW"
+                    , "POP"
+                }, Color.black);
+        }
+
         timer = rof;
     }
 
@@ -182,5 +219,6 @@ public class Char : MonoBehaviour
     {
         Animate();
         timer = Mathf.Max(0, timer - Time.deltaTime);
+        fx_hp = Mathf.Max(fx_hp - Time.deltaTime, 0);
     }
 }
