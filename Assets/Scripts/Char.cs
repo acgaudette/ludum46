@@ -88,12 +88,16 @@ public class Char : MonoBehaviour
         transform.position = new Vector3(pos, 0, depth);
     }
 
+    void Shoot()
+    {
+        var audio = GetComponent<AudioSource>();
+        audio.Play();
+    }
+
     void Tap(int dir)
     {
         Debug.Assert(dir != 0);
-        angv += kick * Time.deltaTime * -dir;
-
-        // TODO: fix force bounce
+        angv += kick * -dir;
 
         if (!down)
         {
@@ -123,6 +127,13 @@ public class Char : MonoBehaviour
 
         look = Input.mousePosition.x / Screen.width;
         look = 2 * look - 1;
+
+        var fire = Input.GetKeyDown(KeyCode.Space)
+            || Input.GetMouseButtonDown(0);
+        if (fire)
+        {
+            Shoot();
+        }
     }
 
     void Update()
