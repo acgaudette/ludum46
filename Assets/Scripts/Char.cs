@@ -184,7 +184,7 @@ public class Char : MonoBehaviour
                     , "OW"
                     , "#%!@&"
                 },
-                Color.red);
+                Color.magenta);
         }
         else
         {
@@ -254,7 +254,7 @@ public class Char : MonoBehaviour
                       "BANG"
                     , "POW"
                     , "POP"
-                }, Color.black);
+                }, Color.white);
         }
 
         shootTimer = rof;
