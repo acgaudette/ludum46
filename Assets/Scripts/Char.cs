@@ -20,20 +20,27 @@ public class Char : MonoBehaviour
     public float damp;
     public float fall;
 
+    public float rof;
+
     // public float upright;
     // public float deadzone;
 
     [HideInInspector] public bool down;
+    [HideInInspector] public int hp;
     float angv;
     float angle;
     float vel;
     float pos;
     float depth;
     [HideInInspector] public float look;
+    [HideInInspector] public Quaternion manual;
+    float timer;
 
     void Start()
     {
         depth = transform.position.z;
+        manual = Quaternion.identity;
+        hp = 3;
     }
 
     void FixedUpdate()
@@ -95,39 +102,63 @@ public class Char : MonoBehaviour
     void Animate()
     {
         var dive = Quaternion.AngleAxis(angle * Mathf.Rad2Deg, Vector3.forward);
-        var flip = Quaternion.AngleAxis(Player ? 1 : 180, Vector3.up);
-        var aim = Quaternion.AngleAxis(look * Global.Values.spin * 90, Vector3.up);
-        transform.rotation = flip * aim * dive;
+        // var flip = Quaternion.AngleAxis(Player ? 0 : 180, Vector3.up);
+        var aim = manual == Quaternion.identity ?
+            Quaternion.AngleAxis(look * Global.Values.spin * 90, Vector3.up) :
+            manual;
+
+        transform.rotation = /* flip * */ aim * dive;
         transform.position = new Vector3(pos, 0, depth);
     }
 
-    public void Hit()
+    public void Hit(int side)
     {
+        --hp;
+
+        if (0 == hp)
+        {
+            vel += side * 10;
+            angv += side * 10;
+        }
+
         var audio = GetComponents<AudioSource>();
         audio[1].Play();
-        Global.invert += Global.Values.sleep;
+
+        if (!Player)
+            Global.invert += Global.Values.sleep;
+    }
+
+    public RaycastHit? Cast(Vector3 dir)
+    {
+        RaycastHit hit;
+        var start = transform.Find("_cast").position;
+        var ray = Physics.Raycast(start, dir, out hit, 128);
+
+        // Debug.DrawRay(start, fwd * 128, ray ? Color.green : Color.red, 0.5f, false);
+
+        RaycastHit? result = hit;
+        return ray ? result : null;
     }
 
     public void Shoot()
     {
-        RaycastHit hit;
-        var start = transform.Find("_cast").position;
-        var fwd = transform.rotation * Vector3.forward;
-        var ray = Physics.Raycast(start, fwd, out hit, 128);
+        if (timer > 0) return;
 
-        // Debug.DrawRay(start, fwd * 128, ray ? Color.green : Color.red, 0.5f, false);
-
-        if (ray)
+        var result = Cast(transform.rotation * Vector3.forward);
+        if (result.HasValue)
         {
-            var tag = hit.transform.tag;
-            if (tag == "opponent" || tag == "Player")
+            var trans = result.Value.transform;
+            if (trans.tag == "opponent" || trans.tag == "Player")
             {
-                hit.transform.GetComponent<Char>().Hit();
+                var diff = transform.position.x - trans.position.x;
+                trans.GetComponent<Char>().Hit(diff > 1 ? 1 : -1);
             }
         }
 
         var audio = GetComponent<AudioSource>();
         audio.Play();
+
+        timer = rof;
     }
 
     public void Tap(int dir)
@@ -144,5 +175,6 @@ public class Char : MonoBehaviour
     void Update()
     {
         Animate();
+        timer = Mathf.Max(0, timer - Time.deltaTime);
     }
 }

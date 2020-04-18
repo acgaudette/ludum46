@@ -200,6 +200,7 @@ MonoBehaviour:
   slap: 0.35
   damp: 8
   fall: 0.01
+  rof: 0.15
   down: 0
   look: 0
 --- !u!82 &924174431

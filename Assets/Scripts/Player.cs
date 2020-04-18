@@ -12,6 +12,9 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (0 == self.hp)
+            return;
+
         if (Global.invert > 0) return;
 
         var right = (
