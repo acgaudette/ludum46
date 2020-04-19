@@ -20,6 +20,7 @@ public class Global : MonoBehaviour
     public static float invert;
     Color clear;
     GameObject cover;
+    Char[] chars;
 
     [System.Serializable]
     public class Invert
@@ -69,6 +70,7 @@ public class Global : MonoBehaviour
 
         cover = GameObject.Find("_cover");
         foreach (var inv in inverts) inv.Init();
+        chars = Object.FindObjectsOfType<Char>();
     }
 
     void Level(int l)
@@ -119,6 +121,25 @@ public class Global : MonoBehaviour
     {
         pdata.level = loss ? 0 : pdata.level + 1;
         Values.StartCoroutine(Values.DelayLoad(pdata.level));
+    }
+
+    public static void Dispatch(Transform body)
+    {
+        foreach (var ch in Values.chars)
+        {
+            if (ch.transform == body) continue;
+
+            var dir = ch.transform.position - body.position;
+            dir.Normalize();
+
+            var src = body.GetComponent<Char>();
+            var result = src.Cast(dir);
+            if (result.HasValue && result.Value.transform.GetComponent<Char>() != null)
+            {
+                var amt = Vector3.Dot(dir, body.forward);
+                ch.Miss(src, amt);
+            }
+        }
     }
 
     public static Global inst;

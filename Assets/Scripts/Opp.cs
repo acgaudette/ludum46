@@ -130,6 +130,16 @@ public class Opp : MonoBehaviour
         var dir = enemy.transform.position - transform.position;
         dir.Normalize();
 
+        var win = 0.1f;
+        if (Time.time - self.lastMiss < win || Time.time - self.lastHit < win)
+        {
+            if (self.lastAggr != null)
+            {
+                lastTarget = self.lastAggr.transform.position;
+                lastSelf = transform.position;
+            }
+        }
+
         if (Vector3.Dot(dir, transform.forward) > 0.5f)
         {
             var result = self.Cast(dir);
@@ -194,7 +204,10 @@ public class Opp : MonoBehaviour
         seen += Time.deltaTime;
         seenDelay = Mathf.Clamp01(seen / 3);
 
-        stress = Mathf.Clamp01(0.7f * (Time.time - self.lastHit));
+        stress = 0;
+        stress += Mathf.Clamp01(0.7f * (Time.time - self.lastHit));
+        stress += Mathf.Clamp01(0.7f * (Time.time - self.lastMiss));
+        stress = Mathf.Clamp01(stress);
         stress = 1 - stress * stress;
 
         if (transform.position.x > Global.Values.width - 1)

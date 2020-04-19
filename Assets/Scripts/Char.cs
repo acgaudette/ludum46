@@ -35,6 +35,8 @@ public class Char : MonoBehaviour
 
     [HideInInspector] public float fx_hp;
     [HideInInspector] public float lastHit;
+    [HideInInspector] public float lastMiss;
+    [HideInInspector] public Char lastAggr;
     [HideInInspector] public float lastShot;
     [HideInInspector] public bool cocked;
     [HideInInspector] public bool down;
@@ -187,7 +189,14 @@ public class Char : MonoBehaviour
         transform.position = new Vector3(pos, 0, depth);
     }
 
-    public void Hit(int side)
+    public void Miss(Char src, float amt)
+    {
+        if (amt < 0.97f) return;
+        lastMiss = Time.time;
+        lastAggr = src;
+    }
+
+    public void Hit(Char src, int side)
     {
         if (!invincible) --hp;
         if (hp < 0) hp = 0;
@@ -226,6 +235,7 @@ public class Char : MonoBehaviour
         }
 
         lastHit = Time.time;
+        lastAggr = src;
     }
 
     public RaycastHit? Cast(Vector3 dir)
@@ -262,6 +272,8 @@ public class Char : MonoBehaviour
         if (!cocked)
         {
             Sfx(Sound.Misfire);
+            // TODO: position dependent
+            // Global.Dispatch(transform);
             return;
         }
 
@@ -283,7 +295,7 @@ public class Char : MonoBehaviour
                 var diff = transform.position.x - body.position.x;
                 var sign = diff > 1 ? -1 : 1;
                 // sign = Player ? sign * -1 : sign;
-                body.GetComponent<Char>().Hit(sign);
+                body.GetComponent<Char>().Hit(this, sign);
 
                 /*
                 if (!Player)
@@ -306,6 +318,8 @@ public class Char : MonoBehaviour
                     var pos = hit.point + orient * Vector3.forward * 0.01f;
                     var splat = GameObject.Instantiate(splatPrefab, hit.point, orient);
                 }
+
+                Global.Dispatch(transform);
             }
 
             if (Player)
