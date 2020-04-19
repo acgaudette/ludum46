@@ -12,10 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 387d4a98976b21cd6980212af8909268, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  opp: {fileID: 0}
-  aim: 14
+  enemy: {fileID: 0}
+  aim: 100
   spread: 0.025
-  hysteresis: 6
+  hysteresis: 1
+  brainRate: 0.01
+  coverSpeed: 0.7
+  peekSpeed: 0.2
+  switchSpeed: 0.7
 --- !u!1001 &7513263551387029556
 PrefabInstance:
   m_ObjectHideFlags: 0

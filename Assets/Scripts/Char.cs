@@ -73,6 +73,7 @@ public class Char : MonoBehaviour
         Debug.Assert(cast != null);
 
         hp = 3;
+        lastHit = -16;
     }
 
     void FixedUpdate()
