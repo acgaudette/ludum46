@@ -1002,7 +1002,7 @@ MonoBehaviour:
   slap: 0.35
   damp: 8
   fall: 0.01
-  knock: 12
+  knock: 20
   rof: 0.15
   roc: 0.08
   invincible: 0

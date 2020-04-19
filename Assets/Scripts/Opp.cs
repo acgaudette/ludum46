@@ -5,13 +5,7 @@ using System.Collections.Generic;
 public class Opp : MonoBehaviour
 {
     public Char enemy;
-    public float aim;
-    public float spread;
-    public float hysteresis;
-    public float brainRate;
-    [Range(0, 1)] public float coverSpeed;
-    [Range(0, 1)] public float peekSpeed;
-    [Range(0, 1)] public float switchSpeed;
+    public Bot bot;
 
     Vector3 lastTarget;
     Vector3 lastSelf;
@@ -164,7 +158,7 @@ public class Opp : MonoBehaviour
         Debug.DrawLine(lastSelf, lastTarget, Color.magenta);
 
         locked = los ? Vector3.Dot(transform.forward, dir) : 0;
-        shot = locked > 1 - spread;
+        shot = locked >= 1 - (bot.spread + 0.01f);
         locked = Mathf.Max(0, locked);
 
         /*
@@ -216,7 +210,7 @@ public class Opp : MonoBehaviour
     void FixedUpdate()
     {
         brainTimer += Time.deltaTime;
-        if (brainTimer < brainRate)
+        if (brainTimer < bot.brainRate)
         {
             return;
         }
@@ -264,7 +258,7 @@ public class Opp : MonoBehaviour
             recScore,
         };
 
-        scores[(int)action] += hysteresis;
+        scores[(int)action] += bot.hysteresis;
 
         float total = 0;
         foreach (var score in scores)
@@ -298,12 +292,12 @@ public class Opp : MonoBehaviour
         switch (action)
         {
         case Action.Cover:
-            urg = coverSpeed + stress * (1 - coverSpeed);
+            urg = bot.coverSpeed + stress * (1 - bot.coverSpeed);
             Move(NearestCover() > 0 ? 1 : -1, urg);
             break;
         case Action.Peek:
             // Move(NearestCover() > 0 ? -1 : 1, 0.5f);
-            urg = peekSpeed;
+            urg = bot.peekSpeed;
             var side = transform.position.x > lastTarget.x ? -1 : 1;
             Move(side, urg);
             break;
@@ -317,7 +311,7 @@ public class Opp : MonoBehaviour
             break;
         case Action.Switch:
             side = switchSide;
-            urg = switchSpeed;
+            urg = bot.switchSpeed;
             Move(switchSide, urg);
             break;
         case Action.Hide:
@@ -331,7 +325,7 @@ public class Opp : MonoBehaviour
         }
 
         timer += Time.deltaTime;
-        var t = Mathf.Pow(2, aim * Time.deltaTime);
+        var t = Mathf.Pow(2, bot.aim * Time.deltaTime);
         self.manual = Quaternion.Slerp(self.manual, target, t);
     }
 }

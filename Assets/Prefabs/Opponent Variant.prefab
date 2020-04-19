@@ -13,13 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
-  aim: 100
-  spread: 0.025
-  hysteresis: 1
-  brainRate: 0.01
-  coverSpeed: 0.7
-  peekSpeed: 0.2
-  switchSpeed: 0.7
+  bot: {fileID: 11400000, guid: f31bf6db1d2cc1d93a13587144843435, type: 2}
 --- !u!1001 &7513263551387029556
 PrefabInstance:
   m_ObjectHideFlags: 0
