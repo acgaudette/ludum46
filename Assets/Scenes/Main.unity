@@ -1166,7 +1166,7 @@ MonoBehaviour:
   spin: 0.75
   sleep: 0.5
   width: 14
-  loadTime: 2
+  loadTime: 1.5
   deathKick: 48
   shoutTime: 0.1
   colors:
