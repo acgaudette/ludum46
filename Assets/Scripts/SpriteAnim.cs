@@ -8,6 +8,7 @@ public class SpriteAnim : MonoBehaviour
 
     public bool play = false;
     public bool loop = false;
+    public bool dup = false;
     public float rate = 1;
     public int count = 1;
     public int width = 32;
@@ -20,6 +21,8 @@ public class SpriteAnim : MonoBehaviour
         var render = GetComponent<MeshRenderer>();
         mat = Application.isPlaying ?
             render.material : render.sharedMaterial;
+        if (dup)
+            timer = -rate;
     }
 
     void Update()
@@ -37,11 +40,18 @@ public class SpriteAnim : MonoBehaviour
             if (!loop && frame >= count)
             {
                 frame = count - 1;
+                play = false;
             }
         }
 
         frame %= count;
         mat.mainTextureScale = new Vector2(1 / (float)count, 1);
         mat.mainTextureOffset = new Vector2(frame / (float)count, 0);
+    }
+
+    public void Play()
+    {
+        frame = 0;
+        play = true;
     }
 }

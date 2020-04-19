@@ -52,6 +52,7 @@ public class Char : MonoBehaviour
     float cockTimer;
     AudioSource[] snd;
     Transform cast;
+    SpriteAnim revolver;
 
     enum Sound
     {
@@ -73,6 +74,9 @@ public class Char : MonoBehaviour
 
         cast = transform.Find("_cam").Find("_cast");
         Debug.Assert(cast != null);
+
+        revolver = Camera.main.transform.Find("_revolver")
+            .GetComponent<SpriteAnim>();
 
         hp = 3;
         lastHit = -16;
@@ -230,6 +234,7 @@ public class Char : MonoBehaviour
         if (!cocked)
         {
             Sfx(Sound.Cock);
+            revolver.frame = 1;
         }
 
         cocked = true;
@@ -274,6 +279,8 @@ public class Char : MonoBehaviour
                 var orient = Quaternion.LookRotation(-Camera.main.transform.forward, Vector3.up);
                 var flash = GameObject.Instantiate(flashPrefab, hit.point, orient);
                 GameObject.Destroy(flash, 1);
+
+                revolver.Play();
             }
         }
 
