@@ -258,7 +258,8 @@ public class Char : MonoBehaviour
         if (!cocked)
         {
                 Sfx(Sound.Cock);
-                revolver.Reset(1);
+                if (Player)
+                    revolver.Reset(1);
         }
 
         cocked = true;

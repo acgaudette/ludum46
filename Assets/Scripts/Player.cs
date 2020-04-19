@@ -5,7 +5,7 @@ public class Player : MonoBehaviour
 {
     // public float sens;
     public float sway;
-    public float raise;
+    public Vector2 raise;
     public float swayDamp;
     public float kick;
 
@@ -50,9 +50,11 @@ public class Player : MonoBehaviour
         }
 
         var sign = self.angle > 0 ? 1 : -1;
+        var mag = sign * self.angv;
+        mag *= mag > 0 ? raise.x : raise.y;
         var offset = new Vector3(
             -self.vel * sway,
-            sign * self.angv * raise - cam.h * 0.001f,
+            mag - cam.h * 0.001f,
             0
         );
 
