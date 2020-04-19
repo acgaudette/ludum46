@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
     TextMesh lvl;
     Transform gun;
     Vector3 gunCenter;
-    Vector3 gunAnim;
     Cam cam;
 
     void Start()
@@ -57,7 +56,8 @@ public class Player : MonoBehaviour
             0
         );
 
-        var swayPt = gunCenter + offset;
+        var swayPt = gunCenter + offset
+            - Vector3.forward * (self.cocked ? 0.01f: 0);
         gun.localPosition = Vector3.Lerp(gun.localPosition, swayPt, Time.deltaTime * swayDamp);
 
         var t = Mathf.Clamp01(10 * (Time.time - self.lastShot));
