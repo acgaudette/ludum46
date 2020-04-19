@@ -10,15 +10,52 @@ public class Player : MonoBehaviour
 
     Char self;
     TextMesh hp;
+    TextMesh lvl;
     Transform gun;
     Vector3 gunCenter;
+    Cam cam;
 
     void Start()
     {
         self = GetComponent<Char>();
         hp = Camera.main.transform.Find("_hp").GetComponent<TextMesh>();
+        lvl = Camera.main.transform.Find("_lvl").GetComponent<TextMesh>();
         gun = Camera.main.transform.Find("_revolver");
         gunCenter = gun.localPosition;
+        cam = Camera.main.GetComponent<Cam>();
+    }
+
+    void Render()
+    {
+        hp.text = self.hp.ToString();
+
+        if (self.fx_hp > 0)
+        {
+            hp.gameObject.SetActive(Time.time % 0.1f > 0.05f);
+        }
+        else
+        {
+            hp.gameObject.SetActive(false);
+        }
+
+        if (Time.timeSinceLevelLoad < 1)
+        {
+            lvl.gameObject.SetActive(Time.time % 0.1f > 0.05f);
+        }
+        else
+        {
+            lvl.gameObject.SetActive(false);
+        }
+
+        var sign = self.angle > 0 ? 1 : -1;
+        var offset = new Vector3(
+            -self.vel * sway,
+            sign * self.angv * raise - cam.h * 0.001f,
+            0
+        );
+
+        var swayPt = gunCenter + offset;
+        gun.localPosition = Vector3.Lerp(gun.localPosition, swayPt, Time.deltaTime * swayDamp);
     }
 
     void Control()
@@ -41,7 +78,7 @@ public class Player : MonoBehaviour
         int dir = left + right;
         if (dir != 0)
         {
-            Camera.main.GetComponent<Cam>().heart += 0.1f;
+            cam.heart += 0.1f;
             self.Tap(dir);
         }
 
@@ -71,27 +108,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        hp.text = self.hp.ToString();
-
-        if (self.fx_hp > 0)
-        {
-            hp.gameObject.SetActive(Time.time % 0.1f > 0.05f);
-        }
-        else
-        {
-            hp.gameObject.SetActive(false);
-        }
-
-        var sign = self.angle > 0 ? 1 : -1;
-        var offset = new Vector3(
-            -self.vel * sway,
-            sign * self.angv * raise,
-            0
-        );
-
-        var swayPt = gunCenter + offset;
-        gun.localPosition = Vector3.Lerp(gun.localPosition, swayPt, Time.deltaTime * swayDamp);
-
+        Render();
         Control();
     }
 }

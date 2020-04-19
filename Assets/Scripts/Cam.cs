@@ -8,6 +8,8 @@ public class Cam : MonoBehaviour
     public float baserate;
     public float amp;
 
+    [HideInInspector] public float h;
+
     Vector3 origin;
     float timer;
 
@@ -21,7 +23,8 @@ public class Cam : MonoBehaviour
         // heart = Mathf.Max(0, Mathf.Min(1, heart - Time.deltaTime * decay));
         heart = 0;
         float rate = baserate + heart * baserate * 3;
-        float y = origin.y + Mathf.Sin(Time.time * rate) * amp;
+        h = Mathf.Sin(Time.time * rate);
+        float y = origin.y + h * amp;
         transform.localPosition = new Vector3(0, y, 0);
 
         shake -= Time.deltaTime;

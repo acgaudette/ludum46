@@ -174,6 +174,7 @@ public class Char : MonoBehaviour
         {
             vel += side * 10;
             angv += side * 10;
+            Global.Iter(Player);
         }
 
         Sfx(Sound.Hit);
