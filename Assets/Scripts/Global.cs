@@ -10,9 +10,10 @@ public class Global : MonoBehaviour
     public float sleep = 0.5f;
     public float width = 8;
     public float loadTime;
+    public float deathKick = 8;
 
     public static float invert;
-    public static int level;
+    [HideInInspector] public int level;
     Color clear;
 
     public Texture2D cursor;
@@ -20,9 +21,10 @@ public class Global : MonoBehaviour
     void Start()
     {
         clear = Camera.main.backgroundColor;
+        DontDestroyOnLoad(gameObject);
     }
 
-    static void Level(int l)
+    void Level(int l)
     {
         level = l;
         SceneManager.LoadScene("Main");
@@ -60,8 +62,8 @@ public class Global : MonoBehaviour
 
     public static void Iter(bool loss)
     {
-        level = loss ? 0 : level + 1;
-        Values.StartCoroutine(Values.DelayLoad(level));
+        Values.level = loss ? 0 : Values.level + 1;
+        Values.StartCoroutine(Values.DelayLoad(Values.level));
     }
 
     public static Global inst;

@@ -20,6 +20,8 @@ public class Char : MonoBehaviour
     public float damp;
     public float fall;
 
+    public float knock;
+
     public float rof;
     public float roc;
     public bool invincible;
@@ -172,9 +174,14 @@ public class Char : MonoBehaviour
 
         if (0 == hp)
         {
-            vel += side * 10;
-            angv += side * 10;
+            vel += side * Global.Values.deathKick;
+            angv += side * Global.Values.deathKick * -0.75f;
             Global.Iter(Player);
+        }
+        else
+        {
+            vel += side * knock;
+            angv += side * knock * -0.01f;
         }
 
         Sfx(Sound.Hit);
@@ -247,7 +254,9 @@ public class Char : MonoBehaviour
             if (trans.tag == "opponent" || trans.tag == "Player")
             {
                 var diff = transform.position.x - trans.position.x;
-                trans.GetComponent<Char>().Hit(diff > 1 ? 1 : -1);
+                var sign = diff > 1 ? -1 : 1;
+                // sign = Player ? sign * -1 : sign;
+                trans.GetComponent<Char>().Hit(sign);
             }
         }
 
