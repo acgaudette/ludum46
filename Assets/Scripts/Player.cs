@@ -57,7 +57,7 @@ public class Player : MonoBehaviour
         );
 
         var swayPt = gunCenter + offset
-            - Vector3.forward * (self.cocked ? 0.01f: 0);
+            - Vector3.forward * (self.cocked ? 0.005f: 0);
         gun.localPosition = Vector3.Lerp(gun.localPosition, swayPt, Time.deltaTime * swayDamp);
 
         var t = Mathf.Clamp01(10 * (Time.time - self.lastShot));

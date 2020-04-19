@@ -233,8 +233,9 @@ public class Char : MonoBehaviour
 
         if (!cocked)
         {
-            Sfx(Sound.Cock);
-            revolver.frame = 1;
+            if (!revolver.play)
+                Sfx(Sound.Cock);
+            revolver.Reset(1);
         }
 
         cocked = true;
@@ -254,7 +255,10 @@ public class Char : MonoBehaviour
         cocked = false;
 
         if (Player)
+        {
             Camera.main.GetComponent<Cam>().shake += 0.1f;
+            revolver.Play();
+        }
 
         var result = Cast(transform.rotation * Vector3.forward);
         if (result.HasValue)
@@ -277,10 +281,9 @@ public class Char : MonoBehaviour
             if (Player)
             {
                 var orient = Quaternion.LookRotation(-Camera.main.transform.forward, Vector3.up);
+                var pos = hit.point + orient * Vector3.forward * 0.1f;
                 var flash = GameObject.Instantiate(flashPrefab, hit.point, orient);
-                GameObject.Destroy(flash, 1);
-
-                revolver.Play();
+                GameObject.Destroy(flash.gameObject, 1);
             }
         }
 

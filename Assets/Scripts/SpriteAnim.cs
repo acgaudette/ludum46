@@ -9,12 +9,21 @@ public class SpriteAnim : MonoBehaviour
     public bool play = false;
     public bool loop = false;
     public bool dup = false;
-    public float rate = 1;
+    public float delay = 1;
     public int count = 1;
     public int width = 32;
+    public int clip = 0;
 
     Material mat;
     float timer;
+
+    int Lim
+    {
+        get
+        {
+            return clip > 0 ? clip : count;
+        }
+    }
 
     void Awake()
     {
@@ -22,7 +31,7 @@ public class SpriteAnim : MonoBehaviour
         mat = Application.isPlaying ?
             render.material : render.sharedMaterial;
         if (dup)
-            timer = -rate;
+            timer = -delay;
     }
 
     void Update()
@@ -31,13 +40,13 @@ public class SpriteAnim : MonoBehaviour
 
         if (Application.isPlaying && play)
         {
-            if (timer > rate)
+            if (timer > delay)
             {
                 timer = 0;
                 ++frame;
             }
 
-            if (!loop && frame >= count)
+            if (!loop && frame >= Lim)
             {
                 frame = count - 1;
                 play = false;
@@ -53,5 +62,16 @@ public class SpriteAnim : MonoBehaviour
     {
         frame = 0;
         play = true;
+    }
+
+    public void Reset(int i)
+    {
+        frame = 1;
+        play = false;
+    }
+
+    public float Len()
+    {
+        return Lim * delay;
     }
 }
