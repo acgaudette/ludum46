@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: revolver
+  m_Name: revolver_a
   m_Shader: {fileID: 4800000, guid: 85c98102ce75cc8308cfb4e49667abe0, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -40,8 +40,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: b9b68e6d45fd7744ab6e0bf961420acf, type: 3}
-        m_Scale: {x: 0.09090909, y: 1}
+        m_Texture: {fileID: 2800000, guid: d0de7e0d111539202a1f9f91a0803636, type: 3}
+        m_Scale: {x: 0.1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
