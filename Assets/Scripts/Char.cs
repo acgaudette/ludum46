@@ -61,6 +61,10 @@ public class Char : MonoBehaviour
         , Fall
         , Cock
         , Move
+        , Misfire
+        , Win
+        , Lose
+        , Begin
     };
 
     void Start()
@@ -80,6 +84,8 @@ public class Char : MonoBehaviour
 
         hp = 3;
         lastHit = -16;
+
+        Sfx(Sound.Begin);
     }
 
     void FixedUpdate()
@@ -160,7 +166,9 @@ public class Char : MonoBehaviour
 
     void Sfx(Sound sound)
     {
-        snd[(int)sound].Play();
+        var clip = snd[(int)sound];
+        clip.pitch = Random.Range(0.9f, 1.1f);
+        clip.Play();
     }
 
     void Animate()
@@ -185,14 +193,14 @@ public class Char : MonoBehaviour
             vel += side * Global.Values.deathKick;
             angv += side * Global.Values.deathKick * -0.75f;
             Global.Iter(Player);
+            Sfx(Player ? Sound.Lose : Sound.Win);
         }
         else
         {
             vel += side * knock;
             angv += side * knock * -0.01f;
+            Sfx(Sound.Hit);
         }
-
-        Sfx(Sound.Hit);
 
         if (!Player)
         {
@@ -230,12 +238,12 @@ public class Char : MonoBehaviour
     public void Cock()
     {
         if (cockTimer > 0) return;
+        if (revolver.play) return;
 
         if (!cocked)
         {
-            if (!revolver.play)
                 Sfx(Sound.Cock);
-            revolver.Reset(1);
+                revolver.Reset(1);
         }
 
         cocked = true;
@@ -248,7 +256,7 @@ public class Char : MonoBehaviour
 
         if (!cocked)
         {
-            Sfx(Sound.Cock);
+            Sfx(Sound.Misfire);
             return;
         }
 
