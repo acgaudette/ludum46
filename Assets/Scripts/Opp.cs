@@ -218,9 +218,7 @@ public class Opp : MonoBehaviour
         brainTimer = 0;
 
         float coverScore = 0;
-        coverScore += 1 - locked;
-        coverScore += exposure;
-        coverScore /= 2;
+        coverScore = (1 - locked) * exposure;
 
         float peekScore = shot ? 0 : 1;
 
