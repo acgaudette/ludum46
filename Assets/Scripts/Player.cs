@@ -7,12 +7,14 @@ public class Player : MonoBehaviour
     public float sway;
     public float raise;
     public float swayDamp;
+    public float kick;
 
     Char self;
     TextMesh hp;
     TextMesh lvl;
     Transform gun;
     Vector3 gunCenter;
+    Vector3 gunAnim;
     Cam cam;
 
     void Start()
@@ -38,6 +40,7 @@ public class Player : MonoBehaviour
             hp.gameObject.SetActive(false);
         }
 
+        lvl.text = Global.pdata.level.ToString();
         if (Time.timeSinceLevelLoad < 1)
         {
             lvl.gameObject.SetActive(Time.time % 0.1f > 0.05f);
@@ -56,6 +59,24 @@ public class Player : MonoBehaviour
 
         var swayPt = gunCenter + offset;
         gun.localPosition = Vector3.Lerp(gun.localPosition, swayPt, Time.deltaTime * swayDamp);
+
+        var t = Mathf.Clamp01(10 * (Time.time - self.lastShot));
+
+        /*
+        var kickup = Vector3.zero;
+        if (t < 1)
+        {
+            t = 1 - t * t * t;
+            kickup = Vector3.up * t * kick;
+        }
+
+        gun.localPosition = gunAnim + kickup;
+        */
+
+        Camera.main.transform.localRotation = Quaternion.AngleAxis(
+            (1 - t) * kick,
+            -Vector3.right
+        );
     }
 
     void Control()

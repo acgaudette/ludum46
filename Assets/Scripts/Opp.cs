@@ -54,7 +54,7 @@ public class Opp : MonoBehaviour
         Vector3 fwd = transform.forward;
         for (float i = -Global.Values.width; i < Global.Values.width; i += 0.5f)
         {
-            var start = transform.Find("_cast").position;
+            var start = transform.Find("_cam").Find("_cast").position;
             Vector3 curr = new Vector3(
                 i,
                 start.y, // FIXME

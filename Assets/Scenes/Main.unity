@@ -1116,12 +1116,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   thresh: 0.35
   flat: 0.9
-  spin: 0.8
+  spin: 0.75
   sleep: 0.5
   width: 14
   loadTime: 2
   deathKick: 48
-  level: 0
+  pdataPrefab: {fileID: 8746775720295715014, guid: c7221f0b451efb228a907b713731b224,
+    type: 3}
   cursor: {fileID: 2800000, guid: 14118ee26a2b9ed6d84d058f07676bfa, type: 3}
 --- !u!4 &1472268496
 Transform:

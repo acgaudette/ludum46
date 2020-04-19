@@ -12,8 +12,9 @@ public class Global : MonoBehaviour
     public float loadTime;
     public float deathKick = 8;
 
+    public GameObject pdataPrefab;
+    public static PData pdata;
     public static float invert;
-    [HideInInspector] public int level;
     Color clear;
 
     public Texture2D cursor;
@@ -21,12 +22,22 @@ public class Global : MonoBehaviour
     void Start()
     {
         clear = Camera.main.backgroundColor;
-        DontDestroyOnLoad(gameObject);
+
+        if (pdata == null)
+        {
+            var obj = GameObject.Find("_pdata");
+            if (obj == null)
+            {
+                obj = GameObject.Instantiate(pdataPrefab);
+            }
+
+            pdata = obj.GetComponent<PData>();
+        }
     }
 
     void Level(int l)
     {
-        level = l;
+        pdata.level = l;
         SceneManager.LoadScene("Main");
     }
 
@@ -62,8 +73,8 @@ public class Global : MonoBehaviour
 
     public static void Iter(bool loss)
     {
-        Values.level = loss ? 0 : Values.level + 1;
-        Values.StartCoroutine(Values.DelayLoad(Values.level));
+        pdata.level = loss ? 0 : pdata.level + 1;
+        Values.StartCoroutine(Values.DelayLoad(pdata.level));
     }
 
     public static Global inst;

@@ -126,7 +126,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2845864311062580809}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!82 &291291876
 AudioSource:
@@ -632,11 +632,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1725876118}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.25, z: 0}
+  m_LocalPosition: {x: 0, y: -0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2845864311062580809}
-  m_RootOrder: 2
+  m_Father: {fileID: 2845864310092199182}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1970733203
 GameObject:
@@ -838,7 +838,7 @@ GameObject:
   - component: {fileID: 2845864310092199168}
   - component: {fileID: 1121032141}
   m_Layer: 0
-  m_Name: Camera
+  m_Name: _cam
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -858,6 +858,7 @@ Transform:
   - {fileID: 1970733204}
   - {fileID: 68630300}
   - {fileID: 1976329873}
+  - {fileID: 1725876119}
   m_Father: {fileID: 2845864311062580809}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -962,7 +963,6 @@ Transform:
   m_Children:
   - {fileID: 3214423406472669624}
   - {fileID: 2845864310092199182}
-  - {fileID: 1725876119}
   - {fileID: 291291871}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -982,6 +982,7 @@ MonoBehaviour:
   sway: 0.0025
   raise: 0.2
   swayDamp: 6
+  kick: 10
 --- !u!114 &2845864311062580810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1009,6 +1010,7 @@ MonoBehaviour:
     type: 3}
   fx_hp: 0
   lastHit: 0
+  lastShot: 0
   cocked: 0
   down: 0
   downside: 0

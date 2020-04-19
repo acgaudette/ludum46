@@ -33,6 +33,7 @@ public class Char : MonoBehaviour
 
     [HideInInspector] public float fx_hp;
     [HideInInspector] public float lastHit;
+    [HideInInspector] public float lastShot;
     [HideInInspector] public bool cocked;
     [HideInInspector] public bool down;
     [HideInInspector] public int downside;
@@ -68,7 +69,7 @@ public class Char : MonoBehaviour
         Debug.Assert(audio != null);
         snd = audio.GetComponents<AudioSource>();
 
-        cast = transform.Find("_cast");
+        cast = transform.Find("_cam").Find("_cast");
         Debug.Assert(cast != null);
 
         hp = 3;
@@ -274,6 +275,7 @@ public class Char : MonoBehaviour
         }
 
         shootTimer = rof;
+        lastShot = Time.time;
     }
 
     public void Tap(int dir)
