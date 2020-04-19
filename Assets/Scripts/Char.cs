@@ -30,6 +30,8 @@ public class Char : MonoBehaviour
     // public float deadzone;
 
     public TextMesh shoutPrefab;
+    public MeshRenderer splatPrefab;
+    public SpriteAnim flashPrefab;
 
     [HideInInspector] public float fx_hp;
     [HideInInspector] public float lastHit;
@@ -252,13 +254,26 @@ public class Char : MonoBehaviour
         var result = Cast(transform.rotation * Vector3.forward);
         if (result.HasValue)
         {
-            var trans = result.Value.transform;
-            if (trans.tag == "opponent" || trans.tag == "Player")
+            var hit = result.Value;
+            var body = hit.transform;
+            if (body.tag == "opponent" || body.tag == "Player")
             {
-                var diff = transform.position.x - trans.position.x;
+                var diff = transform.position.x - body.position.x;
                 var sign = diff > 1 ? -1 : 1;
                 // sign = Player ? sign * -1 : sign;
-                trans.GetComponent<Char>().Hit(sign);
+                body.GetComponent<Char>().Hit(sign);
+            }
+            else
+            {
+                // var orient = Quaternion.LookRotation(hit.normal, Vector3.up);
+                // var splat = GameObject.Instantiate(splatPrefab, hit.point, orient);
+            }
+
+            if (Player)
+            {
+                var orient = Quaternion.LookRotation(-Camera.main.transform.forward, Vector3.up);
+                var flash = GameObject.Instantiate(flashPrefab, hit.point, orient);
+                GameObject.Destroy(flash, 1);
             }
         }
 

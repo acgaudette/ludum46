@@ -632,7 +632,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1725876118}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.25, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2845864310092199182}
@@ -1007,6 +1007,9 @@ MonoBehaviour:
   roc: 0.08
   invincible: 0
   shoutPrefab: {fileID: 8371894471333490967, guid: 21d7cff8745a58efeadafc293d40fb38,
+    type: 3}
+  splatPrefab: {fileID: 0}
+  flashPrefab: {fileID: 8564097078365556012, guid: 8fc85a1b13bc05c1886b4ba715d69e1e,
     type: 3}
   fx_hp: 0
   lastHit: 0

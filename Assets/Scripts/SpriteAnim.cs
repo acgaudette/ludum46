@@ -1,0 +1,47 @@
+using UnityEngine;
+
+[ExecuteInEditMode]
+[RequireComponent(typeof(MeshRenderer))]
+public class SpriteAnim : MonoBehaviour
+{
+    public int frame;
+
+    public bool play = false;
+    public bool loop = false;
+    public float rate = 1;
+    public int count = 1;
+    public int width = 32;
+
+    Material mat;
+    float timer;
+
+    void Awake()
+    {
+        var render = GetComponent<MeshRenderer>();
+        mat = Application.isPlaying ?
+            render.material : render.sharedMaterial;
+    }
+
+    void Update()
+    {
+        timer += Time.deltaTime;
+
+        if (Application.isPlaying && play)
+        {
+            if (timer > rate)
+            {
+                timer = 0;
+                ++frame;
+            }
+
+            if (!loop && frame >= count)
+            {
+                frame = count - 1;
+            }
+        }
+
+        frame %= count;
+        mat.mainTextureScale = new Vector2(1 / (float)count, 1);
+        mat.mainTextureOffset = new Vector2(frame / (float)count, 0);
+    }
+}
