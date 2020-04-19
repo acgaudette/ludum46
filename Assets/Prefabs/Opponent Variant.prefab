@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 0}
-  bot: {fileID: 11400000, guid: f31bf6db1d2cc1d93a13587144843435, type: 2}
+  bot: {fileID: 11400000, guid: bc663fd13ce4cd291927bc98f9dd7645, type: 2}
 --- !u!1001 &7513263551387029556
 PrefabInstance:
   m_ObjectHideFlags: 0

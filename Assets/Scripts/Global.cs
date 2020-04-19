@@ -11,16 +11,49 @@ public class Global : MonoBehaviour
     public float width = 8;
     public float loadTime;
     public float deathKick = 8;
+    public float shoutTime = 0.2f;
+    public Color[] colors;
+    public float flash = 0.2f;
 
     public GameObject pdataPrefab;
     public static PData pdata;
     public static float invert;
     Color clear;
+    GameObject cover;
 
+    [System.Serializable]
+    public class Invert
+    {
+        public MeshRenderer target;
+        public Color alt;
+
+        Color def;
+        Material mat;
+
+        public void Init()
+        {
+            Debug.Assert(target != null);
+            mat = target.material;
+            def = mat.color;
+        }
+
+        public void SetAlt()
+        {
+            mat.color = alt;
+        }
+
+        public void SetDef()
+        {
+            mat.color = def;
+        }
+    }
+
+    public Invert[] inverts;
     public Texture2D cursor;
 
     void Start()
     {
+        Debug.Assert(colors.Length == 2);
         clear = Camera.main.backgroundColor;
 
         if (pdata == null)
@@ -33,6 +66,9 @@ public class Global : MonoBehaviour
 
             pdata = obj.GetComponent<PData>();
         }
+
+        cover = GameObject.Find("_cover");
+        foreach (var inv in inverts) inv.Init();
     }
 
     void Level(int l)
@@ -47,17 +83,25 @@ public class Global : MonoBehaviour
         {
             invert -= Time.unscaledDeltaTime;
             Time.timeScale = 0;
-            Camera.main.backgroundColor = Color.white;
+            cover.SetActive(false);
+            foreach (var inv in inverts) inv.SetAlt();
+            Color col = Time.unscaledTime % flash < flash * .5f ?
+                colors[0] : colors[1];
+            Camera.main.backgroundColor = col;
             return;
         }
 
-        Camera.main.backgroundColor = clear;
+        cover.SetActive(true);
         Time.timeScale = 1;
+        foreach (var inv in inverts) inv.SetDef();
+        Camera.main.backgroundColor = clear;
 
+        /*
         if (Input.GetKeyDown(KeyCode.R))
         {
             Level(0);
         }
+        */
 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Confined;

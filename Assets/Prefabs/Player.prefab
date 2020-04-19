@@ -1476,7 +1476,7 @@ MonoBehaviour:
   slap: 0.35
   damp: 8
   fall: 0.01
-  knock: 20
+  knock: 32
   rof: 0.15
   roc: 0.08
   invincible: 0
@@ -1508,7 +1508,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.1, y: 2.2, z: 0.5}
+  m_Size: {x: 1.1, y: 2.2, z: 0.8}
   m_Center: {x: 0, y: 1.1, z: 0}
 --- !u!1001 &2845864311054590637
 PrefabInstance:

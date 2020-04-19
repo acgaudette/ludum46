@@ -154,14 +154,18 @@ public class Char : MonoBehaviour
     public void TextPop(string[] msg, Color col)
     {
         string caps = msg[Random.Range(0, msg.Length)];
-        var pos = transform.position + Vector3.up * 2 + Vector3.forward * 0.5f;
+
+        var pos = transform.position + Vector3.up * 2 + Vector3.forward * 0.75f;
         pos += new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0);
+
         var orient = Quaternion.LookRotation(Camera.main.transform.forward, Vector3.up);
+        orient *= Quaternion.AngleAxis(Random.Range(-30, 30), Camera.main.transform.forward);
+
         var pop = GameObject.Instantiate(shoutPrefab, pos, orient)
             .GetComponent<TextMesh>();
         pop.text = caps;
         pop.color = col;
-        GameObject.Destroy(pop.gameObject, 0.5f);
+        GameObject.Destroy(pop.gameObject, Global.Values.shoutTime);
     }
 
     void Sfx(Sound sound)
@@ -198,7 +202,7 @@ public class Char : MonoBehaviour
         else
         {
             vel += side * knock;
-            angv += side * knock * -0.01f;
+            angv += side * knock * -0.005f;
             Sfx(Sound.Hit);
         }
 
@@ -211,8 +215,9 @@ public class Char : MonoBehaviour
                       "OUCH"
                     , "OW"
                     , "#%!@&"
+                    , "&#!@$"
                 },
-                Color.magenta);
+                Color.red);
         }
         else
         {
@@ -279,11 +284,28 @@ public class Char : MonoBehaviour
                 var sign = diff > 1 ? -1 : 1;
                 // sign = Player ? sign * -1 : sign;
                 body.GetComponent<Char>().Hit(sign);
+
+                /*
+                if (!Player)
+                {
+                    TextPop(
+                        new[]
+                        {
+                              "GET SOME"
+                            , "EAT IT"
+                        },
+                        Color.magenta);
+                }
+                */
             }
             else
             {
-                // var orient = Quaternion.LookRotation(hit.normal, Vector3.up);
-                // var splat = GameObject.Instantiate(splatPrefab, hit.point, orient);
+                if (Player && splatPrefab)
+                {
+                    var orient = Quaternion.LookRotation(hit.normal, Vector3.up);
+                    var pos = hit.point + orient * Vector3.forward * 0.01f;
+                    var splat = GameObject.Instantiate(splatPrefab, hit.point, orient);
+                }
             }
 
             if (Player)
@@ -305,7 +327,7 @@ public class Char : MonoBehaviour
                       "BANG"
                     , "POW"
                     , "POP"
-                }, Color.white);
+                }, Color.yellow);
         }
 
         shootTimer = rof;
