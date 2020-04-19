@@ -14,6 +14,7 @@ public class Global : MonoBehaviour
     public float shoutTime = 0.2f;
     public Color[] colors;
     public float flash = 0.2f;
+    public Bot[] levels;
 
     public GameObject pdataPrefab;
     public static PData pdata;
@@ -71,6 +72,14 @@ public class Global : MonoBehaviour
         cover = GameObject.Find("_cover");
         foreach (var inv in inverts) inv.Init();
         chars = Object.FindObjectsOfType<Char>();
+
+        foreach (var ch in chars)
+        {
+            var opp = ch.GetComponent<Opp>();
+            if (opp == null) continue;
+            opp.bot = pdata.level >= levels.Length ?
+                levels[levels.Length - 1] : levels[pdata.level];
+        }
     }
 
     void Level(int l)
