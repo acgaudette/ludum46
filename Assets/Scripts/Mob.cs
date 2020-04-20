@@ -8,7 +8,7 @@ public class Mob : MonoBehaviour
     float stress;
 
     Char self;
-    bool side;
+    [HideInInspector] public bool pside;
 
     Cover cover;
     float timer;
@@ -28,9 +28,12 @@ public class Mob : MonoBehaviour
     void Start()
     {
         self = GetComponent<Char>();
-        side = Vector3.Dot(transform.forward, Vector3.forward) > 0;
+        pside = Vector3.Dot(transform.forward, Vector3.forward) > 0;
         cover = new Cover();
         cover.Init(transform);
+
+        float x = Random.Range(-Global.Values.width, Global.Values.width);
+        transform.position += Vector3.right * x;
     }
 
     void Move(int side)
@@ -105,10 +108,9 @@ public class Mob : MonoBehaviour
     void Update()
     {
         timer += Time.deltaTime;
-        self.manual = side ?
+        self.manual = pside ?
               Quaternion.identity
             : Quaternion.AngleAxis(180, Vector3.up);
-
         if (0 == self.hp) return;
 
         Collect();

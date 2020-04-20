@@ -11,6 +11,23 @@ public class Char : MonoBehaviour
         }
     }
 
+    public bool Mob
+    {
+        get
+        {
+            return GetComponent<Mob>() != null;
+        }
+    }
+
+    public bool OppMob
+    {
+        get
+        {
+            var mob = GetComponent<Mob>();
+            return mob != null && !mob.pside;
+        }
+    }
+
     public float kick;
     public float dash;
 
@@ -29,7 +46,6 @@ public class Char : MonoBehaviour
     public MeshRenderer splatPrefab;
     public SpriteAnim flashPrefab;
 
-    [HideInInspector] public float fx_hp;
     [HideInInspector] public float lastHit;
     [HideInInspector] public float lastMiss;
     [HideInInspector] public Char lastAggr;
@@ -83,7 +99,7 @@ public class Char : MonoBehaviour
         hp = maxHp;
         lastHit = -16;
 
-        Sfx(Sound.Begin);
+        if (Player) Sfx(Sound.Begin);
     }
 
     void FixedUpdate()
@@ -202,8 +218,21 @@ public class Char : MonoBehaviour
         {
             vel += side * Global.Values.deathKick;
             angv += side * Global.Values.deathKick * -0.75f;
-            Global.Iter(Player);
-            Sfx(Player ? Sound.Lose : Sound.Win);
+
+            if (!Mob)
+            {
+                Global.Iter(Player);
+                Sfx(Player ? Sound.Lose : Sound.Win);
+            }
+            else if (!OppMob)
+            {
+                Global.fx_hp += 0.5f;
+                // Sfx(Sound.Misfire);
+            }
+            else if (OppMob)
+            {
+                Sfx(Sound.Hit);
+            }
         }
         else
         {
@@ -212,7 +241,12 @@ public class Char : MonoBehaviour
             Sfx(Sound.Hit);
         }
 
-        if (!Player)
+        if (Player)
+        {
+            Camera.main.GetComponent<Cam>().shake += 0.3f;
+            if (!invincible) Global.fx_hp += 0.5f;
+        }
+        else if (!Mob || OppMob)
         {
             Global.invert += Global.Values.sleep;
             TextPop(
@@ -224,11 +258,6 @@ public class Char : MonoBehaviour
                     , "&#!@$"
                 },
                 Color.red);
-        }
-        else
-        {
-            Camera.main.GetComponent<Cam>().shake += 0.3f;
-            fx_hp += 0.5f;
         }
 
         lastHit = Time.time;
@@ -364,6 +393,5 @@ public class Char : MonoBehaviour
         Animate();
         shootTimer = Mathf.Max(0, shootTimer - Time.deltaTime);
         cockTimer = Mathf.Max(0, cockTimer - Time.deltaTime);
-        fx_hp = Mathf.Max(fx_hp - Time.deltaTime, 0);
     }
 }

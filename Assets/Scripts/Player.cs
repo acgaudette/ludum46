@@ -28,9 +28,10 @@ public class Player : MonoBehaviour
 
     void Render()
     {
-        hp.text = self.hp.ToString();
+        // hp.text = self.hp.ToString();
+        hp.text = (Global.MobCount(true) + 1).ToString();
 
-        if (self.fx_hp > 0)
+        if (Global.fx_hp > 0)
         {
             hp.gameObject.SetActive(Time.time % 0.1f > 0.05f);
         }
@@ -131,6 +132,7 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        self.invincible = Global.MobCount(true) > 0;
         Render();
         Control();
     }

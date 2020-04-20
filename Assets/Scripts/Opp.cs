@@ -260,6 +260,7 @@ public class Opp : MonoBehaviour
 
     void Update()
     {
+        self.invincible = Global.MobCount(false) > 0;
         if (0 == self.hp)
             return;
 

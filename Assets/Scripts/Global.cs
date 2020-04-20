@@ -24,6 +24,7 @@ public class Global : MonoBehaviour
     public GameObject pdataPrefab;
     public static PData pdata;
     public static float invert;
+    public static float fx_hp;
     Color clear;
     GameObject cover;
     Char[] chars;
@@ -126,6 +127,8 @@ public class Global : MonoBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
         // Cursor.lockState = CursorLockMode.Locked; // Bugs out mouse on Linux
+
+        fx_hp = Mathf.Max(fx_hp - Time.deltaTime, 0);
     }
 
     IEnumerator DelayLoad(int l)
@@ -157,6 +160,21 @@ public class Global : MonoBehaviour
                 ch.Miss(src, amt);
             }
         }
+    }
+
+    public static int MobCount(bool player)
+    {
+        int result = 0;
+
+        foreach (var ch in Values.chars)
+        {
+            if (ch.hp == 0) continue;
+            var mob = ch.GetComponent<Mob>();
+            if (mob == null) continue;
+            result += mob.pside == player ? 1 : 0;
+        }
+
+        return result;
     }
 
     public static Global inst;
