@@ -1173,6 +1173,7 @@ MonoBehaviour:
   flash: 0.8
   levels:
   - {fileID: 11400000, guid: bc663fd13ce4cd291927bc98f9dd7645, type: 2}
+  - {fileID: 11400000, guid: 2d19b689dca7a4d65add0ac47e52fe79, type: 2}
   - {fileID: 11400000, guid: 6b09ae1bebbc5ff00a15015e2c79a6a3, type: 2}
   - {fileID: 11400000, guid: c41973ddeded995ee89d3ab0c3244352, type: 2}
   forceLevel: -1
@@ -1182,7 +1183,7 @@ MonoBehaviour:
   - target: {fileID: 898984972}
     alt: {r: 1, g: 0, b: 0, a: 1}
   - target: {fileID: 1794797976}
-    alt: {r: 1, g: 0, b: 0, a: 1}
+    alt: {r: 0, g: 0, b: 0, a: 1}
   cursor: {fileID: 2800000, guid: 14118ee26a2b9ed6d84d058f07676bfa, type: 3}
 --- !u!4 &1472268496
 Transform:

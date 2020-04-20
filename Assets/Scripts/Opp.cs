@@ -67,8 +67,18 @@ public class Opp : MonoBehaviour
     {
         if (cover.Covered(lastTarget.x))
         {
-            float near = cover.NearestCover(transform.position.x);
-            Move(near > 0 ? -1 : 1, urg);
+            var x = transform.position.x;
+            float near = cover.NearestCover(x);
+
+            if (0 == near)
+            {
+                Move(x > 0 ? -1 : 1, urg);
+            }
+            else
+            {
+                Move(near > 0 ? -1 : 1, urg);
+            }
+
             return;
         }
 
@@ -138,7 +148,7 @@ public class Opp : MonoBehaviour
         Debug.DrawLine(lastSelf, lastTarget, Color.magenta);
 
         locked = los ? Vector3.Dot(transform.forward, dir) : 0;
-        shot = locked >= 1 - (bot.spread + 0.005f);
+        shot = locked >= 1 - (bot.spread + 0.001f);
         locked = Mathf.Max(0, locked);
 
         /*
