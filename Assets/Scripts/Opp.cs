@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(Char))]
 public class Opp : MonoBehaviour
@@ -22,7 +21,7 @@ public class Opp : MonoBehaviour
     Action action;
 
     Char self;
-    List<int> cover;
+    public Cover cover;
     Quaternion target;
     float timer;
     int switchSide = 1;
@@ -47,70 +46,10 @@ public class Opp : MonoBehaviour
         self = GetComponent<Char>();
         lastSelf = -Vector3.up;
         self.manual = target = Quaternion.AngleAxis(180, Vector3.up);
-        cover = new List<int>();
-
         Vector3 origin = transform.position;
-        Vector3 fwd = transform.forward;
-        for (float i = -Global.Values.width; i < Global.Values.width; i += 0.5f)
-        {
-            var start = transform.Find("_cam").Find("_cast").position;
-            Vector3 curr = new Vector3(
-                i,
-                start.y, // FIXME
-                origin.z
-            );
 
-            int val = 0;
-
-            RaycastHit hit;
-            var ray = Physics.Raycast(curr, fwd, out hit, 3);
-            if (ray)
-            {
-                val = 1;
-            }
-
-            Debug.DrawRay(curr, fwd * 3, ray ? Color.green : Color.red, 8, false);
-            cover.Add(val);
-        }
-    }
-
-    int PosToField(float x)
-    {
-        return (int)(
-            cover.Count
-                * (x + Global.Values.width)
-                / (2 * Global.Values.width));
-    }
-
-    bool Covered(float x)
-    {
-        int i = PosToField(x);
-        return cover[i] > 0;
-    }
-
-    float NearestCover()
-    {
-        int pos = PosToField(transform.position.x);
-        if (pos < 0) pos = 0;
-        if (pos >= cover.Count) pos = cover.Count - 1;
-
-        int left = cover.Count;
-        for (int i = pos; i > 0; --i)
-        {
-            if (0 == cover[i]) continue;
-            left = pos - i;
-        }
-
-        int right = cover.Count;
-        for (int i = pos; i < cover.Count; ++i)
-        {
-            if (0 == cover[i]) continue;
-            right = i - pos;
-        }
-
-        float result = Mathf.Abs(right) > Mathf.Abs(left) ?
-            -left : right;
-        return (2 * Global.Values.width) * result / cover.Count;
+        cover = new Cover();
+        cover.Init(transform);
     }
 
     void Move(int side, float urg)
@@ -126,9 +65,9 @@ public class Opp : MonoBehaviour
 
     void Peek(float urg)
     {
-        if (Covered(lastTarget.x))
+        if (cover.Covered(lastTarget.x))
         {
-            Move(NearestCover() > 0 ? -1 : 1, 0.5f);
+            Move(cover.NearestCover(transform.position.x) > 0 ? -1 : 1, 0.5f);
             return;
         }
 
@@ -215,7 +154,7 @@ public class Opp : MonoBehaviour
         */
 
         exposure = Mathf.Clamp01(
-            1 - Mathf.Abs(NearestCover()) / (2 * Global.Values.width)
+            1 - Mathf.Abs(cover.NearestCover(transform.position.x)) / (2 * Global.Values.width)
         );
 
         float disc = Vector3.Distance(lastSelf, transform.position);
@@ -339,7 +278,7 @@ public class Opp : MonoBehaviour
         {
         case Action.Cover:
             // urg = bot.coverSpeed + stress * (1 - bot.coverSpeed);
-            Move(NearestCover() > 0 ? 1 : -1, urg);
+            Move(cover.NearestCover(transform.position.x) > 0 ? 1 : -1, urg);
             break;
         case Action.Peek:
             // urg = bot.peekSpeed;
