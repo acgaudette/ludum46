@@ -21,4 +21,6 @@ public class Bot : ScriptableObject
     [Range(0, 1)] public float trhappy = 0.5f;
     [Range(0, 1)] public float fear = 0.0f;
     [Range(0, 1)] public float stress = 0.0f; // TODO: urg
+
+    public bool showGun = true;
 }

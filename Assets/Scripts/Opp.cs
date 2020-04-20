@@ -70,19 +70,27 @@ public class Opp : MonoBehaviour
         mag *= mag > 0 ? raise.x : raise.y;
         var offset = new Vector3(-self.vel * sway, mag, 0);
 
-        var swayPt = strokeCenter + offset;
-        stroke.localPosition = Vector3.Lerp(
-            stroke.localPosition,
-            swayPt,
-            Time.deltaTime * swayDamp);
-
-        if (Time.time - self.lastShot < 0.1f)
+        if (bot.showGun)
         {
-            flash.SetActive(true);
+            var swayPt = strokeCenter + offset;
+            stroke.localPosition = Vector3.Lerp(
+                stroke.localPosition,
+                swayPt,
+                Time.deltaTime * swayDamp);
+
+            if (Time.time - self.lastShot < 0.1f)
+            {
+                flash.SetActive(true);
+            }
+            else
+            {
+                flash.SetActive(false);
+            }
         }
         else
         {
-            flash.SetActive(false);
+            stroke.gameObject.SetActive(false);
+            flash.gameObject.SetActive(false);
         }
     }
 

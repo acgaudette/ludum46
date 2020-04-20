@@ -13,17 +13,18 @@ MonoBehaviour:
   m_Name: Aimbot
   m_EditorClassIdentifier: 
   brainRate: 0.01
-  hysteresis: 0
+  hysteresis: 1
   aim: 128
   spread: 0
-  baseSpeed: 0.8
+  baseSpeed: 0.9
   coverSpeed: 0.8
   peekSpeed: 0.8
   switchSpeed: 0.8
-  aggro: 1
-  sneak: 0.5
-  mobile: 0.5
+  aggro: 0.75
+  sneak: 0
+  mobile: 1
   forget: 0
   trhappy: 0
   fear: 0
   stress: 0
+  showGun: 0

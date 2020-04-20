@@ -1184,6 +1184,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6b09ae1bebbc5ff00a15015e2c79a6a3, type: 2}
   - {fileID: 11400000, guid: c41973ddeded995ee89d3ab0c3244352, type: 2}
   forceLevel: -1
+  landing: 0
+  landingLevel: 1
   pdataPrefab: {fileID: 8746775720295715014, guid: c7221f0b451efb228a907b713731b224,
     type: 3}
   inverts:
@@ -2012,6 +2014,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1993938597023791465, guid: 035abce720259928bbfa6fa35ba6591f,
+        type: 3}
+      propertyPath: sens
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2845864311062580809, guid: 035abce720259928bbfa6fa35ba6591f,
         type: 3}
       propertyPath: m_LocalPosition.x
