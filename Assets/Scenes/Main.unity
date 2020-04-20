@@ -1158,6 +1158,10 @@ MonoBehaviour:
   thresh: 0.35
   flat: 0.9
   spin: 0.75
+  rof: 0.4
+  roc: 0.08
+  fall: 0.01
+  damp: 8
   sleep: 0.5
   width: 14
   loadTime: 1.5

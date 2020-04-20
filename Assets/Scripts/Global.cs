@@ -7,6 +7,10 @@ public class Global : MonoBehaviour
     [Range(0, 1)] public float thresh = 0.35f;
     [Range(0, 1)] public float flat = 0.9f;
     [Range(0, 1)] public float spin = 0.6f;
+    public float rof = 0.15f;
+    public float roc = 0.08f;
+    public float fall = 0.01f;
+    public float damp = 8;
     public float sleep = 0.5f;
     public float width = 8;
     public float loadTime;

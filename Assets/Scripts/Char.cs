@@ -17,13 +17,9 @@ public class Char : MonoBehaviour
     [Range(0, 1)] public float bounce;
     [Range(0, 1)] public float friction;
     [Range(0, 1)] public float slap;
-    public float damp;
-    public float fall;
 
     public float knock;
 
-    public float rof;
-    public float roc;
     public bool invincible;
 
     // public float upright;
@@ -125,12 +121,12 @@ public class Char : MonoBehaviour
             */
 
             // angv += -dir * fall;
-            angle = Mathf.Lerp(angle, 0, Time.deltaTime * damp);
+            angle = Mathf.Lerp(angle, 0, Time.deltaTime * Global.Values.damp);
             angv *= 0.9f;
         }
         else
         {
-            angv += dir * fall;
+            angv += dir * Global.Values.fall;
         }
 
         angle += angv;
@@ -263,7 +259,7 @@ public class Char : MonoBehaviour
         }
 
         cocked = true;
-        cockTimer = roc;
+        cockTimer = Global.Values.roc;
     }
 
     public void Shoot()
@@ -345,7 +341,7 @@ public class Char : MonoBehaviour
                 }, Color.yellow);
         }
 
-        shootTimer = rof;
+        shootTimer = Global.Values.rof;
         lastShot = Time.time;
     }
 
