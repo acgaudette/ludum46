@@ -6,6 +6,10 @@ public class Opp : MonoBehaviour
     public Char enemy;
     public Bot bot;
 
+    public float sway;
+    public Vector2 raise;
+    public float swayDamp;
+
     Vector3 lastTarget;
     Vector3 lastSelf;
 
@@ -28,6 +32,10 @@ public class Opp : MonoBehaviour
     float seen;
     float brainTimer;
 
+    Transform stroke;
+    GameObject flash;
+    Vector3 strokeCenter;
+
     enum Action
     {
           Cover
@@ -47,9 +55,35 @@ public class Opp : MonoBehaviour
         lastSelf = -Vector3.up;
         self.manual = target = Quaternion.AngleAxis(180, Vector3.up);
         Vector3 origin = transform.position;
+        stroke = transform.Find("_stroke");
+        strokeCenter = stroke.localPosition;
+        flash = stroke.Find("_flash").gameObject;
 
         cover = new Cover();
         cover.Init(transform);
+    }
+
+    void Animate()
+    {
+        var sign = self.angle > 0 ? 1 : -1;
+        var mag = sign * self.angv;
+        mag *= mag > 0 ? raise.x : raise.y;
+        var offset = new Vector3(-self.vel * sway, mag, 0);
+
+        var swayPt = strokeCenter + offset;
+        stroke.localPosition = Vector3.Lerp(
+            stroke.localPosition,
+            swayPt,
+            Time.deltaTime * swayDamp);
+
+        if (Time.time - self.lastShot < 0.1f)
+        {
+            flash.SetActive(true);
+        }
+        else
+        {
+            flash.SetActive(false);
+        }
     }
 
     void Move(int side, float urg)
@@ -281,6 +315,8 @@ public class Opp : MonoBehaviour
 
     void Update()
     {
+        Animate();
+
         if (0 == self.hp)
             return;
 
