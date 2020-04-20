@@ -306,11 +306,15 @@ public class Opp : MonoBehaviour
         Collect();
 
         // target = Quaternion.AngleAxis(180, Vector3.up);
-        var urg = 0.5f;
+        // var urg = 0.5f;
+
+        var urg = bot.baseSpeed;
+        urg += bot.stress * underFire * (1 - bot.baseSpeed);
+
         switch (action)
         {
         case Action.Cover:
-            urg = bot.coverSpeed + stress * (1 - bot.coverSpeed);
+            // urg = bot.coverSpeed + stress * (1 - bot.coverSpeed);
             Move(NearestCover() > 0 ? 1 : -1, urg);
             break;
         case Action.Peek:
@@ -328,8 +332,8 @@ public class Opp : MonoBehaviour
             self.Shoot();
             break;
         case Action.Switch:
-            side = switchSide;
-            urg = bot.switchSpeed;
+            var side = switchSide;
+            // urg = bot.switchSpeed;
             Move(switchSide, urg);
             break;
         case Action.Hide:
