@@ -21,7 +21,7 @@ public class Opp : MonoBehaviour
     Action action;
 
     Char self;
-    public Cover cover;
+    Cover cover;
     Quaternion target;
     float timer;
     int switchSide = 1;
@@ -46,7 +46,6 @@ public class Opp : MonoBehaviour
         self = GetComponent<Char>();
         lastSelf = -Vector3.up;
         self.manual = target = Quaternion.AngleAxis(180, Vector3.up);
-        Vector3 origin = transform.position;
 
         cover = new Cover();
         cover.Init(transform);

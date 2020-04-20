@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b31031744e01544c82116ba9504e151, type: 3}
+  m_Name: Mob
+  m_EditorClassIdentifier: 
+  brainRate: 0.1
+  hysteresis: 1
+  aim: 0
+  spread: 0
+  baseSpeed: 0.4
+  coverSpeed: 0.7
+  peekSpeed: 0.2
+  switchSpeed: 0.7
+  aggro: 0
+  sneak: 0
+  mobile: 0
+  forget: 0
+  trhappy: 0
+  fear: 0
+  stress: 0

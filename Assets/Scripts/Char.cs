@@ -19,8 +19,8 @@ public class Char : MonoBehaviour
     [Range(0, 1)] public float slap;
 
     public float knock;
-
     public bool invincible;
+    public int maxHp = 3;
 
     // public float upright;
     // public float deadzone;
@@ -80,7 +80,7 @@ public class Char : MonoBehaviour
         revolver = Camera.main.transform.Find("_revolver")
             .GetComponent<SpriteAnim>();
 
-        hp = 3;
+        hp = maxHp;
         lastHit = -16;
 
         Sfx(Sound.Begin);
