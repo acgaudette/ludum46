@@ -1158,7 +1158,7 @@ MonoBehaviour:
   thresh: 0.35
   flat: 0.9
   spin: 0.75
-  rof: 0.4
+  rof: 0.3
   roc: 0.08
   fall: 0.01
   damp: 8
@@ -1182,7 +1182,7 @@ MonoBehaviour:
   - target: {fileID: 898984972}
     alt: {r: 1, g: 0, b: 0, a: 1}
   - target: {fileID: 1794797976}
-    alt: {r: 0, g: 0.99015284, b: 1, a: 1}
+    alt: {r: 1, g: 0, b: 0, a: 1}
   cursor: {fileID: 2800000, guid: 14118ee26a2b9ed6d84d058f07676bfa, type: 3}
 --- !u!4 &1472268496
 Transform:

@@ -25,17 +25,20 @@ public class Cover
                 val = 1;
             }
 
-            Debug.DrawRay(curr, fwd * 3, ray ? Color.green : Color.red, 8, false);
+            Debug.DrawRay(curr, fwd * 3, ray ? Color.green : Color.red, 32, false);
             field.Add(val);
         }
     }
 
     int PosToField(float x)
     {
-        return (int)(
+        var init = (int)(
             field.Count
                 * (x + Global.Values.width)
                 / (2 * Global.Values.width));
+        if (init < 0) init = 0;
+        if (init >= field.Count) init = field.Count - 1;
+        return init;
     }
 
     public bool Covered(float x)
@@ -47,14 +50,16 @@ public class Cover
     public float NearestCover(float x)
     {
         int pos = PosToField(x);
-        if (pos < 0) pos = 0;
-        if (pos >= field.Count) pos = field.Count - 1;
+
+        if (field[pos] > 0)
+            return 0;
 
         int left = field.Count;
         for (int i = pos; i > 0; --i)
         {
             if (0 == field[i]) continue;
             left = pos - i;
+            break;
         }
 
         int right = field.Count;
@@ -62,6 +67,7 @@ public class Cover
         {
             if (0 == field[i]) continue;
             right = i - pos;
+            break;
         }
 
         float result = Mathf.Abs(right) > Mathf.Abs(left) ?

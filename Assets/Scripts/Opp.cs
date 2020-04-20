@@ -67,7 +67,8 @@ public class Opp : MonoBehaviour
     {
         if (cover.Covered(lastTarget.x))
         {
-            Move(cover.NearestCover(transform.position.x) > 0 ? -1 : 1, 0.5f);
+            float near = cover.NearestCover(transform.position.x);
+            Move(near > 0 ? -1 : 1, urg);
             return;
         }
 
@@ -87,8 +88,17 @@ public class Opp : MonoBehaviour
     void Collect()
     {
         los = false;
-        var dir = enemy.transform.position - transform.position;
+
+        var root = new Vector3(
+            enemy.cast.position.x,
+            enemy.transform.position.y,
+            enemy.transform.position.z
+        );
+
+        var dir = root - transform.position;
+        var dir3d = enemy.cast.position - self.cast.position;
         dir.Normalize();
+        dir3d.Normalize();
 
         var win = 0.1f;
         if (Time.time - self.lastMiss < win || Time.time - self.lastHit < win)
@@ -102,7 +112,7 @@ public class Opp : MonoBehaviour
 
         if (Vector3.Dot(dir, transform.forward) > 0.5f)
         {
-            var result = self.Cast(dir);
+            var result = self.Cast(dir3d);
             if (result.HasValue)
             {
                 var body = result.Value.transform;
@@ -290,7 +300,7 @@ public class Opp : MonoBehaviour
             target = Quaternion.LookRotation(guess, Vector3.up);
             break;
         case Action.Fire:
-            self.Shoot();
+            self.Shoot(enemy);
             break;
         case Action.Switch:
             var side = switchSide;

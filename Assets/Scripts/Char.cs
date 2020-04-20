@@ -49,7 +49,7 @@ public class Char : MonoBehaviour
     float shootTimer;
     float cockTimer;
     AudioSource[] snd;
-    Transform cast;
+    [HideInInspector] public Transform cast;
     SpriteAnim revolver;
 
     enum Sound
@@ -263,7 +263,7 @@ public class Char : MonoBehaviour
         cockTimer = Global.Values.roc;
     }
 
-    public void Shoot()
+    public void Shoot(Char edit = null)
     {
         if (shootTimer > 0) return;
 
@@ -286,6 +286,24 @@ public class Char : MonoBehaviour
         }
 
         var result = Cast(transform.rotation * Vector3.forward);
+
+        if (!Player && !result.HasValue)
+        {
+            Debug.Assert(edit != null);
+
+            var pos = cast.position + Vector3.Project(
+                edit.cast.position - cast.position,
+                transform.forward
+            );
+
+            pos = new Vector3(pos.x, edit.cast.position.y, pos.z);
+            var dir = pos - cast.position;
+            dir.Normalize();
+
+            // Debug.DrawRay(cast.position, dir * 128, Color.cyan, 32);
+            result = Cast(dir);
+        }
+
         if (result.HasValue)
         {
             var hit = result.Value;

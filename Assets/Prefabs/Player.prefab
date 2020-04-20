@@ -1475,11 +1475,7 @@ MonoBehaviour:
   bounce: 1
   friction: 0.75
   slap: 0.35
-  damp: 8
-  fall: 0.01
   knock: 32
-  rof: 0.15
-  roc: 0.08
   invincible: 0
   shoutPrefab: {fileID: 8371894471333490967, guid: 21d7cff8745a58efeadafc293d40fb38,
     type: 3}
@@ -1500,6 +1496,7 @@ MonoBehaviour:
   angv: 0
   angle: 0
   vel: 0
+  cast: {fileID: 0}
 --- !u!65 &3040620454790805784
 BoxCollider:
   m_ObjectHideFlags: 0
