@@ -175,7 +175,7 @@ public class Opp : MonoBehaviour
                     los = true;
                     lastTarget = body.position;
                     lastSelf = transform.position;
-                    seenDelay = 0;
+                    seen = 0;
 
                     // Debug.DrawRay(transform.position, dir * dist, Color.green);
                 }
@@ -250,28 +250,39 @@ public class Opp : MonoBehaviour
         brainTimer = 0;
 
         float coverScore = 0;
-        coverScore = (1 - locked) * exposure;
+        coverScore += (1 - locked) * exposure;
+        coverScore *= (1 - bot.aggro);
+        // coverScore += bot.fear * underFire;
 
         float peekScore = shot ? 0 : 1;
 
         float aimScore = 0;
-        aimScore += locked;
+        aimScore += (1 - locked);
         aimScore += seenDelay;
         aimScore /= 2;
 
         float fireScore = shot ? 1 : 0;
+        fireScore *= 2 * bot.trhappy;
 
         float switchScore = 0;
         switchScore += los ? 0 : 1;
         switchScore += discovered;
         switchScore /= 2;
+        switchScore *= 2 * bot.mobile;
+        switchScore *= (1 - bot.aggro);
+
+        // Put here instead of cover
+        // for better running
+        switchScore += bot.fear * underFire;
 
         float hideScore = 0;
         hideScore += 1 - exposure;
-        hideScore *= 2; // (!)
+        hideScore *= 2 // (!)
+            * bot.sneak;
 
         float cockScore = self.cocked ? 0 : 1;
-        cockScore *= 2; // (!)
+        cockScore *= 2 // (!)
+            * (1 - bot.forget);
 
         float recScore = self.down ? 1 : 0;
         recScore *= 2; // (!)
