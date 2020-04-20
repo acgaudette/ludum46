@@ -58,6 +58,15 @@ public class Global : MonoBehaviour
     public Invert[] inverts;
     public Texture2D cursor;
 
+    [System.Serializable]
+    public class Render
+    {
+        public Texture2D tex;
+        public int count;
+    }
+
+    public Render[] renders;
+
     void Start()
     {
         Debug.Assert(colors.Length == 2);
@@ -83,6 +92,13 @@ public class Global : MonoBehaviour
 
         foreach (var ch in chars)
         {
+            var renderi = renders[pdata.level];
+            var bill = ch.transform.Find("Billboard");
+            var mat = bill.GetComponent<MeshRenderer>().material;
+            mat.mainTexture = renderi.tex;
+            var anim = bill.GetComponent<SpriteAnim>();
+            anim.count = renderi.count;
+
             var opp = ch.GetComponent<Opp>();
             if (opp == null) continue;
             opp.bot = pdata.level >= levels.Length ?

@@ -1173,10 +1173,11 @@ MonoBehaviour:
   flash: 0.8
   levels:
   - {fileID: 11400000, guid: bc663fd13ce4cd291927bc98f9dd7645, type: 2}
+  - {fileID: 11400000, guid: b9996b1257740355cad61961f4cc027b, type: 2}
   - {fileID: 11400000, guid: 2d19b689dca7a4d65add0ac47e52fe79, type: 2}
   - {fileID: 11400000, guid: 6b09ae1bebbc5ff00a15015e2c79a6a3, type: 2}
   - {fileID: 11400000, guid: c41973ddeded995ee89d3ab0c3244352, type: 2}
-  forceLevel: -1
+  forceLevel: 4
   pdataPrefab: {fileID: 8746775720295715014, guid: c7221f0b451efb228a907b713731b224,
     type: 3}
   inverts:
@@ -1185,6 +1186,17 @@ MonoBehaviour:
   - target: {fileID: 1794797976}
     alt: {r: 0, g: 0, b: 0, a: 1}
   cursor: {fileID: 2800000, guid: 14118ee26a2b9ed6d84d058f07676bfa, type: 3}
+  renders:
+  - tex: {fileID: 2800000, guid: 471fc398c6bd685ca94e107674841801, type: 3}
+    count: 3
+  - tex: {fileID: 2800000, guid: d3c1fa01964867375bf902cc7cd46b66, type: 3}
+    count: 3
+  - tex: {fileID: 2800000, guid: dd25cdc52fd59168482233b3ae708c73, type: 3}
+    count: 2
+  - tex: {fileID: 2800000, guid: 8dbf09e0fa36209cd8097110d9d3b15d, type: 3}
+    count: 4
+  - tex: {fileID: 2800000, guid: 27ca85e7e6546fd8eb14fb5ee7ee66ff, type: 3}
+    count: 3
 --- !u!4 &1472268496
 Transform:
   m_ObjectHideFlags: 0
