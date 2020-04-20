@@ -187,7 +187,8 @@ public class Char : MonoBehaviour
 
     public void Miss(Char src, float amt)
     {
-        if (amt < 0.97f) return;
+        if (amt < 0.98f) return;
+        // Debug.DrawRay(src.transform.position, src.transform.forward * 128, Color.cyan, 1);
         lastMiss = Time.time;
         lastAggr = src;
     }
@@ -249,7 +250,7 @@ public class Char : MonoBehaviour
     public void Cock()
     {
         if (cockTimer > 0) return;
-        if (revolver.play) return;
+        if (Player && revolver.play) return;
 
         if (!cocked)
         {
@@ -271,10 +272,12 @@ public class Char : MonoBehaviour
             Sfx(Sound.Misfire);
             // TODO: position dependent
             // Global.Dispatch(transform);
+            shootTimer = Global.Values.rof;
             return;
         }
 
         cocked = false;
+        Global.Dispatch(transform);
 
         if (Player)
         {
@@ -315,8 +318,6 @@ public class Char : MonoBehaviour
                     var pos = hit.point + orient * Vector3.forward * 0.01f;
                     var splat = GameObject.Instantiate(splatPrefab, hit.point, orient);
                 }
-
-                Global.Dispatch(transform);
             }
 
             if (Player)

@@ -46,7 +46,7 @@ public class Opp : MonoBehaviour
     {
         self = GetComponent<Char>();
         lastSelf = -Vector3.up;
-        target = Quaternion.AngleAxis(180, Vector3.up);
+        self.manual = target = Quaternion.AngleAxis(180, Vector3.up);
         cover = new List<int>();
 
         Vector3 origin = transform.position;
