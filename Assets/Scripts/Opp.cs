@@ -74,14 +74,23 @@ public class Opp : MonoBehaviour
         }
     }
 
+    int PosToField(float x)
+    {
+        return (int)(
+            cover.Count
+                * (x + Global.Values.width)
+                / (2 * Global.Values.width));
+    }
+
+    bool Covered(float x)
+    {
+        int i = PosToField(x);
+        return cover[i] > 0;
+    }
+
     float NearestCover()
     {
-        int pos = (int)(
-            cover.Count
-                * (transform.position.x + Global.Values.width)
-                / (2 * Global.Values.width)
-            );
-
+        int pos = PosToField(transform.position.x);
         if (pos < 0) pos = 0;
         if (pos >= cover.Count) pos = cover.Count - 1;
 
