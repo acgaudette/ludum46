@@ -16,7 +16,7 @@ public class Opp : MonoBehaviour
     float exposure;
     float discovered;
     float seenDelay;
-    float stress;
+    float underFire;
 
     float[] scores;
     Action action;
@@ -213,12 +213,6 @@ public class Opp : MonoBehaviour
         seen += Time.deltaTime;
         seenDelay = Mathf.Clamp01(seen / 3);
 
-        stress = 0;
-        stress += Mathf.Clamp01(0.7f * (Time.time - self.lastHit));
-        stress += Mathf.Clamp01(0.7f * (Time.time - self.lastMiss));
-        stress = Mathf.Clamp01(stress);
-        stress = 1 - stress * stress;
-
         if (transform.position.x > Global.Values.width - 1)
         {
             switchSide = -1;
@@ -227,6 +221,10 @@ public class Opp : MonoBehaviour
         {
             switchSide = 1;
         }
+
+        var max = self.lastMiss > self.lastHit ?
+            self.lastMiss : self.lastHit;
+        underFire = 1 - Mathf.Clamp01((Time.time - max) / 2);
     }
 
     void FixedUpdate()
