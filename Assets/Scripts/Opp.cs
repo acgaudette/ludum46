@@ -124,6 +124,18 @@ public class Opp : MonoBehaviour
         }
     }
 
+    void Peek(float urg)
+    {
+        if (Covered(lastTarget.x))
+        {
+            Move(NearestCover() > 0 ? -1 : 1, 0.5f);
+            return;
+        }
+
+        var side = transform.position.x > lastTarget.x ? -1 : 1;
+        Move(side, urg);
+    }
+
     void Recover()
     {
         if (timer > 0.1f)
@@ -318,10 +330,8 @@ public class Opp : MonoBehaviour
             Move(NearestCover() > 0 ? 1 : -1, urg);
             break;
         case Action.Peek:
-            // Move(NearestCover() > 0 ? -1 : 1, 0.5f);
-            urg = bot.peekSpeed;
-            var side = transform.position.x > lastTarget.x ? -1 : 1;
-            Move(side, urg);
+            // urg = bot.peekSpeed;
+            Peek(urg);
             break;
         case Action.Aim:
             var guess = lastTarget - transform.position;
