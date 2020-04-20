@@ -368,7 +368,7 @@ public class Opp : MonoBehaviour
         }
 
         timer += Time.deltaTime;
-        var t = Mathf.Pow(2, bot.aim * Time.deltaTime);
+        var t = bot.aim * Time.deltaTime;
         self.manual = Quaternion.Slerp(self.manual, target, t);
     }
 }
