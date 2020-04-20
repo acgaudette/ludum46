@@ -8,7 +8,7 @@ public class Bot : ScriptableObject
     [Range(.01f, 1)] public float brainRate = .01f;
     [Range(0, 20)] public float hysteresis = 1;
     [Range(0, 128)] public float aim = 1;
-    [Range(0, 1)] public float spread = .015f;
+    [Range(0, 0.2f)] public float spread = .015f;
     [Range(0, 1)] public float baseSpeed = .5f;
     [HideInInspector] [Range(0, 1)] public float coverSpeed = .7f;
     [HideInInspector] [Range(0, 1)] public float peekSpeed = .2f;

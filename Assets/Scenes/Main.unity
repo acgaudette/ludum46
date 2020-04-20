@@ -1173,8 +1173,9 @@ MonoBehaviour:
   flash: 0.8
   levels:
   - {fileID: 11400000, guid: bc663fd13ce4cd291927bc98f9dd7645, type: 2}
-  - {fileID: 11400000, guid: f31bf6db1d2cc1d93a13587144843435, type: 2}
+  - {fileID: 11400000, guid: 6b09ae1bebbc5ff00a15015e2c79a6a3, type: 2}
   - {fileID: 11400000, guid: c41973ddeded995ee89d3ab0c3244352, type: 2}
+  forceLevel: -1
   pdataPrefab: {fileID: 8746775720295715014, guid: c7221f0b451efb228a907b713731b224,
     type: 3}
   inverts:

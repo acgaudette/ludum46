@@ -10,12 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6b31031744e01544c82116ba9504e151, type: 3}
-  m_Name: Grunt
+  m_Name: Terrible
   m_EditorClassIdentifier: 
-  aim: 0.001
-  spread: 0.1
-  hysteresis: 1
   brainRate: 0.1
+  hysteresis: 1
+  aim: 4
+  spread: 0.05
+  baseSpeed: 0.4
   coverSpeed: 0.5
   peekSpeed: 0.1
   switchSpeed: 0.5
+  aggro: 0.8
+  sneak: 0.5
+  mobile: 0.5
+  forget: 0.7
+  trhappy: 0
+  fear: 0.5
+  stress: 0.5

@@ -19,6 +19,7 @@ public class Global : MonoBehaviour
     public Color[] colors;
     public float flash = 0.2f;
     public Bot[] levels;
+    public int forceLevel = -1;
 
     public GameObject pdataPrefab;
     public static PData pdata;
@@ -72,6 +73,9 @@ public class Global : MonoBehaviour
 
             pdata = obj.GetComponent<PData>();
         }
+
+        if (forceLevel >= 0)
+            pdata.level = forceLevel;
 
         cover = GameObject.Find("_cover");
         foreach (var inv in inverts) inv.Init();

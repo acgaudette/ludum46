@@ -189,7 +189,7 @@ public class Opp : MonoBehaviour
         Debug.DrawLine(lastSelf, lastTarget, Color.magenta);
 
         locked = los ? Vector3.Dot(transform.forward, dir) : 0;
-        shot = locked >= 1 - (bot.spread + 0.01f);
+        shot = locked >= 1 - (bot.spread + 0.005f);
         locked = Mathf.Max(0, locked);
 
         /*
@@ -259,10 +259,11 @@ public class Opp : MonoBehaviour
         float aimScore = 0;
         aimScore += (1 - locked);
         aimScore += seenDelay;
-        aimScore /= 2;
+        aimScore += shot ? 0 : 1;
+        aimScore /= 3;
 
         float fireScore = shot ? 1 : 0;
-        fireScore *= 2 * bot.trhappy;
+        fireScore += 2 * bot.trhappy;
 
         float switchScore = 0;
         switchScore += los ? 0 : 1;

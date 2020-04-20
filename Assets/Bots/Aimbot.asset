@@ -12,10 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b31031744e01544c82116ba9504e151, type: 3}
   m_Name: Aimbot
   m_EditorClassIdentifier: 
+  brainRate: 0.01
+  hysteresis: 0
   aim: 128
   spread: 0
-  hysteresis: 0
-  brainRate: 0.01
+  baseSpeed: 0.8
   coverSpeed: 0.8
   peekSpeed: 0.8
   switchSpeed: 0.8
+  aggro: 1
+  sneak: 0.5
+  mobile: 0.5
+  forget: 0
+  trhappy: 0
+  fear: 0
+  stress: 0
