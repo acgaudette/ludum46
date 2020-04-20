@@ -1333,6 +1333,11 @@ PrefabInstance:
       propertyPath: m_Color.rgba
       value: 64511
       objectReference: {fileID: 0}
+    - target: {fileID: 1993938597023791465, guid: 035abce720259928bbfa6fa35ba6591f,
+        type: 3}
+      propertyPath: cross
+      value: 
+      objectReference: {fileID: 1532544814}
     - target: {fileID: 2845864311062580809, guid: 035abce720259928bbfa6fa35ba6591f,
         type: 3}
       propertyPath: m_LocalPosition.x

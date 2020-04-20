@@ -77,6 +77,31 @@ public class Global : MonoBehaviour
         }
     }
 
+    public static bool XActive
+    {
+        get
+        {
+            return pdata.xactive;
+        }
+        set
+        {
+            pdata.xactive = value;
+        }
+    }
+
+    public static float Sens
+    {
+        get
+        {
+            return pdata.sens;
+        }
+
+        set
+        {
+            pdata.sens = value;
+        }
+    }
+
     void Start()
     {
         Debug.Assert(colors.Length == 2);
@@ -150,9 +175,9 @@ public class Global : MonoBehaviour
         */
 
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Confined;
         Cursor.SetCursor(cursor, Vector2.zero, CursorMode.ForceSoftware);
-        // Cursor.lockState = CursorLockMode.Locked; // Bugs out mouse on Linux
+        // Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     IEnumerator DelayLoad(int l)

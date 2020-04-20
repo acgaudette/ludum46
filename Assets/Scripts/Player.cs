@@ -3,23 +3,26 @@ using UnityEngine;
 [RequireComponent(typeof(Char))]
 public class Player : MonoBehaviour
 {
-    // public float sens;
     public float sway;
     public Vector2 raise;
     public float swayDamp;
     public float kick;
+    public GameObject cross;
 
     Char self;
     TextMesh hp;
+    TextMesh sensobj;
     TextMesh lvl;
     Transform gun;
     Vector3 gunCenter;
     Cam cam;
+    float sensTimer;
 
     void Start()
     {
         self = GetComponent<Char>();
         hp = Camera.main.transform.Find("_hp").GetComponent<TextMesh>();
+        sensobj = Camera.main.transform.Find("_sens").GetComponent<TextMesh>();
         lvl = Camera.main.transform.Find("_lvl").GetComponent<TextMesh>();
         gun = Camera.main.transform.Find("_revolver");
         gunCenter = gun.localPosition;
@@ -28,6 +31,18 @@ public class Player : MonoBehaviour
 
     void Render()
     {
+        sensTimer -= Time.deltaTime;
+
+        sensobj.text = ((int)(Global.Sens * 100) + 1).ToString();
+        if (sensTimer > 0)
+        {
+            sensobj.gameObject.SetActive(true);
+        }
+        else
+        {
+            sensobj.gameObject.SetActive(false);
+        }
+
         hp.text = self.hp.ToString();
 
         if (self.fx_hp > 0)
@@ -79,10 +94,29 @@ public class Player : MonoBehaviour
             (1 - t) * kick,
             -Vector3.right
         );
+
+        cross.SetActive(Global.XActive);
     }
 
     void Control()
     {
+        if (Input.GetKeyDown(KeyCode.Equals))
+        {
+            Global.Sens = Mathf.Clamp(Global.Sens + 0.01f, 0.01f, 0.5f);
+            sensTimer = 1;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Minus))
+        {
+            Global.Sens = Mathf.Clamp(Global.Sens - 0.01f, 0.01f, 0.5f);
+            sensTimer = 1;
+        }
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            Global.XActive = !Global.XActive;
+        }
+
         if (0 == self.hp)
             return;
 
@@ -105,14 +139,13 @@ public class Player : MonoBehaviour
             self.Tap(dir);
         }
 
-        // Screen size dependent, but the alternative is broken on linux
+        /* Screen size dependent, but the alternative is broken on linux
         self.look = Input.mousePosition.x / Screen.width;
         self.look = 2 * self.look - 1;
-
-        /*
-        self.look += Input.GetAxis("Mouse X") * sens;
-        self.look = Mathf.Max(-1, Mathf.Min(1, self.look));
         */
+
+        self.look += Input.GetAxis("Mouse X") * Global.Sens;
+        self.look = Mathf.Max(-1, Mathf.Min(1, self.look));
 
         var fire = Input.GetKeyDown(KeyCode.Space)
             || Input.GetMouseButtonDown(0);
