@@ -83,7 +83,7 @@ public class Char : MonoBehaviour
         hp = 3;
         lastHit = -16;
 
-        Sfx(Sound.Begin);
+        if (!Global.Landing) Sfx(Sound.Begin);
     }
 
     void FixedUpdate()
@@ -149,12 +149,18 @@ public class Char : MonoBehaviour
         downside = angle > 0 ? -1 : 1;
     }
 
-    public void TextPop(string[] msg, Color col)
+    public void TextPop(string[] msg, Color col, bool readable = false)
     {
         string caps = msg[Random.Range(0, msg.Length)];
 
         var pos = transform.position + Vector3.up * 2 + Vector3.forward * 0.75f;
         pos += new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), 0);
+
+        if (readable)
+        {
+            pos -= Vector3.forward * 2;
+            pos += Vector3.up * 0.65f;
+        }
 
         var orient = Quaternion.LookRotation(Camera.main.transform.forward, Vector3.up);
         orient *= Quaternion.AngleAxis(Random.Range(-30, 30), Camera.main.transform.forward);
@@ -163,7 +169,13 @@ public class Char : MonoBehaviour
             .GetComponent<TextMesh>();
         pop.text = caps;
         pop.color = col;
-        GameObject.Destroy(pop.gameObject, Global.Values.shoutTime);
+
+        if (readable)
+            pop.transform.localScale = Vector3.one * 0.012f;
+
+        GameObject.Destroy(
+            pop.gameObject,
+            readable ? 2 : Global.Values.shoutTime);
     }
 
     void Sfx(Sound sound)

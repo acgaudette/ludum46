@@ -20,6 +20,8 @@ public class Global : MonoBehaviour
     public float flash = 0.2f;
     public Bot[] levels;
     public int forceLevel = -1;
+    public bool landing = false;
+    public int landingLevel = 1;
 
     public GameObject pdataPrefab;
     public static PData pdata;
@@ -67,6 +69,14 @@ public class Global : MonoBehaviour
 
     public Render[] renders;
 
+    public static bool Landing
+    {
+        get
+        {
+            return Values.landing;
+        }
+    }
+
     void Start()
     {
         Debug.Assert(colors.Length == 2);
@@ -92,7 +102,8 @@ public class Global : MonoBehaviour
 
         foreach (var ch in chars)
         {
-            var renderi = renders[pdata.level];
+            var lkup = landing ? landingLevel : pdata.level;
+            var renderi = renders[lkup];
             var bill = ch.transform.Find("Billboard");
             var mat = bill.GetComponent<MeshRenderer>().material;
             mat.mainTexture = renderi.tex;
