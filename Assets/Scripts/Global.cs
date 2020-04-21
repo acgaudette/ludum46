@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
@@ -24,6 +25,8 @@ public class Global : MonoBehaviour
     public int landingLevel = 1;
 
     public GameObject pdataPrefab;
+    public AudioMixer mixer;
+
     public static PData pdata;
     public static float invert;
     Color clear;
@@ -89,7 +92,7 @@ public class Global : MonoBehaviour
         }
     }
 
-    public static float Sens
+    public static int Sens
     {
         get
         {
@@ -99,6 +102,22 @@ public class Global : MonoBehaviour
         set
         {
             pdata.sens = value;
+        }
+    }
+
+    public static int Volume
+    {
+        get
+        {
+            return pdata.volume;
+        }
+
+        set
+        {
+            pdata.volume = value;
+            Values.mixer.SetFloat(
+                "Volume",
+                Mathf.Log(pdata.volume / 10.0f + Mathf.Epsilon) * 20);
         }
     }
 
@@ -120,6 +139,10 @@ public class Global : MonoBehaviour
 
         if (forceLevel >= 0)
             pdata.level = forceLevel;
+
+        mixer.SetFloat(
+            "Volume",
+            Mathf.Log(pdata.volume / 10.0f + Mathf.Epsilon) * 20);
 
         cover = GameObject.Find("_cover");
         foreach (var inv in inverts) inv.Init();

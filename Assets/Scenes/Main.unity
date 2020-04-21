@@ -1188,6 +1188,7 @@ MonoBehaviour:
   landingLevel: 1
   pdataPrefab: {fileID: 8746775720295715014, guid: c7221f0b451efb228a907b713731b224,
     type: 3}
+  mixer: {fileID: 24100000, guid: fc833cd96d55682e0ba460e5c3de257d, type: 2}
   inverts:
   - target: {fileID: 898984972}
     alt: {r: 1, g: 0, b: 0, a: 1}

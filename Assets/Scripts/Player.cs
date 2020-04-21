@@ -12,17 +12,20 @@ public class Player : MonoBehaviour
     Char self;
     TextMesh hp;
     TextMesh sensobj;
+    TextMesh volobj;
     TextMesh lvl;
     Transform gun;
     Vector3 gunCenter;
     Cam cam;
     float sensTimer;
+    float volTimer;
 
     void Start()
     {
         self = GetComponent<Char>();
         hp = Camera.main.transform.Find("_hp").GetComponent<TextMesh>();
         sensobj = Camera.main.transform.Find("_sens").GetComponent<TextMesh>();
+        volobj = Camera.main.transform.Find("_vol").GetComponent<TextMesh>();
         lvl = Camera.main.transform.Find("_lvl").GetComponent<TextMesh>();
         gun = Camera.main.transform.Find("_revolver");
         gunCenter = gun.localPosition;
@@ -32,8 +35,9 @@ public class Player : MonoBehaviour
     void Render()
     {
         sensTimer -= Time.deltaTime;
+        volTimer -= Time.deltaTime;
 
-        sensobj.text = ((int)(Global.Sens * 100) + 1).ToString();
+        sensobj.text = Global.Sens.ToString();
         if (sensTimer > 0)
         {
             sensobj.gameObject.SetActive(true);
@@ -41,6 +45,16 @@ public class Player : MonoBehaviour
         else
         {
             sensobj.gameObject.SetActive(false);
+        }
+
+        volobj.text = Global.Volume.ToString();
+        if (volTimer > 0)
+        {
+            volobj.gameObject.SetActive(true);
+        }
+        else
+        {
+            volobj.gameObject.SetActive(false);
         }
 
         hp.text = self.hp.ToString();
@@ -102,14 +116,26 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Equals))
         {
-            Global.Sens = Mathf.Clamp(Global.Sens + 0.01f, 0.01f, 0.5f);
+            Global.Sens = Mathf.Clamp(Global.Sens + 1, 1, 50);
             sensTimer = 1;
         }
 
         if (Input.GetKeyDown(KeyCode.Minus))
         {
-            Global.Sens = Mathf.Clamp(Global.Sens - 0.01f, 0.01f, 0.5f);
+            Global.Sens = Mathf.Clamp(Global.Sens - 1, 1, 50);
             sensTimer = 1;
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftBracket))
+        {
+            Global.Volume = Mathf.Clamp(Global.Volume - 1, 0, 10);
+            volTimer = 1;
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightBracket))
+        {
+            Global.Volume = Mathf.Clamp(Global.Volume + 1, 0, 10);
+            volTimer = 1;
         }
 
         if (Input.GetKeyDown(KeyCode.X))
@@ -144,7 +170,8 @@ public class Player : MonoBehaviour
         self.look = 2 * self.look - 1;
         */
 
-        self.look += Input.GetAxis("Mouse X") * Global.Sens;
+        var sens = Global.Sens / 100.0f;
+        self.look += Input.GetAxis("Mouse X") * sens;
         self.look = Mathf.Max(-1, Mathf.Min(1, self.look));
 
         var fire = Input.GetKeyDown(KeyCode.Space)
